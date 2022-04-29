@@ -1,0 +1,20 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "System\\": "system/"
+        }
+    },
+    "require": {
+        "symfony/var-dumper": "^5.3",
+        "ramsey/uuid": "^4.2",
+        "intervention/image": "^2.6",
+        "firebase/php-jwt": "^5.4",
+        "vlucas/phpdotenv": "^5.3",
+        "defuse/php-encryption": "^2.3",
+        "symfony/polyfill": "^1.23",
+        "phpmailer/phpmailer": "^6.5",
+        "gregwar/captcha": "^1.1",
+        "morilog/jalali": "^3.2"
+    }
+}

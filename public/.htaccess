@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+    <IfModule mod_reqtimeout.c>
+        RequestReadTimeout header = 20-40, MinRate = 500 body = 20, MinRate = 500
+    </IfModule>
+</IfModule>
+
+
