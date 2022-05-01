@@ -6,15 +6,17 @@
         }
     },
     "require": {
-        "symfony/var-dumper": "^5.3",
-        "ramsey/uuid": "^4.2",
-        "intervention/image": "^2.6",
-        "firebase/php-jwt": "^5.4",
-        "vlucas/phpdotenv": "^5.3",
+        "symfony/var-dumper": "^6.0",
+        "ramsey/uuid": "^4.3",
+        "intervention/image": "^2.7",
+        "firebase/php-jwt": "^6.1",
+        "vlucas/phpdotenv": "^5.4",
         "defuse/php-encryption": "^2.3",
-        "symfony/polyfill": "^1.23",
-        "phpmailer/phpmailer": "^6.5",
+        "symfony/polyfill": "^1.25",
+        "phpmailer/phpmailer": "^6.6",
         "gregwar/captcha": "^1.1",
-        "morilog/jalali": "^3.2"
+        "morilog/jalali": "^3.3",
+        "symfony/finder": "^6.0",
+        "symfony/filesystem": "^6.0"
     }
 }

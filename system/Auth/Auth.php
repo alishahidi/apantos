@@ -2,7 +2,7 @@
 
 namespace System\Auth;
 
-use App\User;
+use App\Models\User;
 use System\Cookie\Cookie;
 use System\Security\Security;
 use System\Session\Session;

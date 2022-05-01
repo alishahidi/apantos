@@ -15,7 +15,7 @@ class Routing
 
   public function __construct()
   {
-    $this->current_route = explode('/', Config::get('app.CURRENT_ROUTE'));
+    $this->current_route = explode('/', trim(Config::get('app.CURRENT_ROUTE'), '/'));
     $this->method_field = $this->methodField();
     global $routes;
     $this->routes = $routes;
@@ -24,11 +24,10 @@ class Routing
   public function run()
   {
 
-    $match = $this->match();
+    $match = $this->matchMethod();
     if (empty($match)) {
       $this->error404();
     }
-
 
     $classPath = str_replace('\\', '/', $match["class"]);
     $path = Config::get('app.BASE_DIR') . "/app/Http/Controllers/" . $classPath . ".php";
@@ -51,12 +50,11 @@ class Routing
     }
   }
 
-  public function match()
+  private function matchMethod()
   {
-
     $reservedRoutes = $this->routes[$this->method_field];
     foreach ($reservedRoutes as $reservedRoute) {
-      if ($this->compare($reservedRoute['url']) == true) {
+      if ($this->compare($reservedRoute['url']) === true) {
         return ["class" => $reservedRoute['class'], "method" => $reservedRoute['method']];
       } else {
         $this->values = [];
@@ -67,24 +65,16 @@ class Routing
 
   private function compare($reservedRouteUrl)
   {
-
-    //part1
-    if (trim($reservedRouteUrl, '/') === '') {
+    if (trim($reservedRouteUrl, '/') === '')
       return trim($this->current_route[0], '/') === '' ? true : false;
-    }
-
-    //part2
     $reservedRouteUrlArray = explode('/', $reservedRouteUrl);
-    if (sizeof($this->current_route) != sizeof($reservedRouteUrlArray)) {
+    if (sizeof($this->current_route) !== sizeof($reservedRouteUrlArray))
       return false;
-    }
-
-    //part3
     foreach ($this->current_route as $key => $currentRouteElement) {
       $reservedRouteUrlElement = $reservedRouteUrlArray[$key];
-      if (substr($reservedRouteUrlElement, 0, 1) == "{" && substr($reservedRouteUrlElement, -1) == "}") {
+      if (substr($reservedRouteUrlElement, 0, 1) === "{" && substr($reservedRouteUrlElement, -1) === "}") {
         array_push($this->values, $currentRouteElement);
-      } elseif ($reservedRouteUrlElement != $currentRouteElement) {
+      } elseif ($reservedRouteUrlElement !== $currentRouteElement) {
         return false;
       }
     }
