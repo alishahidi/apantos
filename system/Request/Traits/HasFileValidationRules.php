@@ -15,14 +15,14 @@ trait HasFileValidationRules
         foreach ($ruleArray as $rule) {
             if ($rule == "required")
                 $this->fileRequired($name);
-            elseif (strpos($rule, "mimes:") == 0) {
+            elseif (strpos($rule, "mimes:") === 0) {
                 $rule = str_replace("mimes:", "", $rule);
                 $typesArray = explode(",", $rule);
                 $this->fileType($name, $typesArray);
-            } elseif (strpos($rule, "max:") == 0) {
+            } elseif (strpos($rule, "max:") === 0) {
                 $rule = str_replace("max:", "", $rule);
                 $this->maxFile($name, $rule);
-            } elseif (strpos($rule, "min:") == 0) {
+            } elseif (strpos($rule, "min:") === 0) {
                 $rule = str_replace("min:", "", $rule);
                 $this->minFile($name, $rule);
             }

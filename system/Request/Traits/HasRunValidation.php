@@ -5,11 +5,13 @@ namespace System\Request\Traits;
 
 trait HasRunValidation
 {
-    protected function errorRedirect()
+    protected function errorRedirect($redirect)
     {
         if ($this->errorExist == false)
             return $this->request;
-        return back();
+        if ($redirect)
+            return back();
+        safeHeader('HTTP/1.0 400 Bad Request', 'Problem in request. (check your input.)');
     }
 
     private function checkFirstError($name)

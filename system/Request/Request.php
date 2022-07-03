@@ -19,7 +19,7 @@ class Request
     protected $errorVariablesName = [];
     protected $customErrors = [];
 
-    public function __construct()
+    public function __construct($redirect = true)
     {
         if (getMethod() === "post")
             $this->verifyToken();
@@ -29,7 +29,7 @@ class Request
             $this->files = $_FILES;
         $rules = $this->rules();
         empty($rules) ? null : $this->run($rules);
-        $this->errorRedirect();
+        $this->errorRedirect($redirect);
     }
 
     protected function rules()

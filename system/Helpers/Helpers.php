@@ -1,5 +1,6 @@
 <?php
 
+use Ramsey\Uuid\Nonstandard\Uuid;
 use System\Config\Config;
 use System\Dot\Dot;
 use System\Security\Security;
@@ -19,7 +20,7 @@ if (!function_exists("view")) {
     }
 }
 
-if (! function_exists('dot')) {
+if (!function_exists('dot')) {
     function dot($items)
     {
         return new Dot($items);
@@ -332,12 +333,20 @@ if (!function_exists("env")) {
     }
 }
 
+if (!function_exists("get_rand_key")) {
+    function get_rand_key()
+    {
+        return md5(Uuid::uuid4()->toString());
+    }
+}
+
 if (!function_exists("get_token")) {
     function get_token()
     {
         return Security::getToken();
     }
 }
+
 
 if (!function_exists("get_crypt_token")) {
     function get_crypt_token()
@@ -411,6 +420,35 @@ if (!function_exists("limitDotPrint")) {
     }
 }
 
+if (!function_exists("estimateReadingTime")) {
+    function estimateReadingTime($text, $wpm = 200)
+    {
+        $totalWords = str_word_count(strip_tags($text));
+        $minutes = floor($totalWords / $wpm);
+        $seconds = floor($totalWords % $wpm / ($wpm / 60));
+        return ["m" => $minutes, "s" => $seconds];
+    }
+}
+
+if (!function_exists("estimateReadingTimePrint")) {
+    function estimateReadingTimePrint($ms)
+    {
+        $minutes = $ms["m"];
+        $seconds = $ms["s"];
+        return "Minute: $minutes Seconds: $seconds";
+    }
+}
+
+
+if (!function_exists("estimateReadingTimePrintPersian")) {
+    function estimateReadingTimePrintPersian($ms)
+    {
+        $minutes = $ms["m"];
+        $seconds = $ms["s"];
+        return "دقیقه: $minutes ثانیه: $seconds";
+    }
+}
+
 function paginateViewRouteGenerator($routeUrl, $pageCount)
 {
     if (isset($_GET[0]))
@@ -431,7 +469,7 @@ function paginateView($count, $perPage, $beforeCount, $afterCount, $routeUrl, $v
     for ($i = $currentPage - $beforeCount; $i <= $currentPage - 1; $i++)
         $paginateView .= $i >= 1 ? str_replace('{' . $counterName . '}', $i, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $i), $view)) : '';
     $paginateView .= str_replace('{' . $counterName . '}', $currentPage, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $currentPage), $activeView));
-    for ($i = $currentPage; $i <= $currentPage + $afterCount - 1; $i++) 
+    for ($i = $currentPage; $i <= $currentPage + $afterCount - 1; $i++)
         $paginateView .= ($i + 1 <= $totalPages) ?  str_replace('{' . $counterName . '}', $i + 1, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $i + 1), $view)) : '';
     $paginateView .= $currentPage != $totalPages ? str_replace('{' . $counterName . '}', $beforeStaticValue, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $currentPage + 1), $view)) : '';
 

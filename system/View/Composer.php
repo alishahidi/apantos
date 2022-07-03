@@ -16,7 +16,11 @@ class Composer
 
     private function registerView($name, $callback)
     {
-        $this->registeredViewArray[$name] = $callback;
+        if (!is_array($name))
+            $this->registeredViewArray[$name] = $callback;
+        else
+            foreach ($name as $viewName)
+                $this->registeredViewArray[$viewName] = $callback;
     }
 
     private function setViewArray($viewArray)
@@ -26,10 +30,10 @@ class Composer
 
     private function getViewVars()
     {
-        foreach($this->viewArray as $view){
-            if(isset($this->registeredViewArray[str_replace("/", ".", $view)])){
+        foreach ($this->viewArray as $view) {
+            if (isset($this->registeredViewArray[str_replace("/", ".", $view)])) {
                 $viewVars = $this->registeredViewArray[str_replace("/", ".", $view)]();
-                foreach($viewVars as $key => $value){
+                foreach ($viewVars as $key => $value) {
                     $this->vars[$key] = $value;
                 }
             }

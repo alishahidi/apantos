@@ -78,14 +78,14 @@ trait HasValidationRules
     protected function maxNumber($name, $count)
     {
         if ($this->checkFieldExist($name))
-            if ($this->request[$name] >= $count && $this->checkFirstError($name))
+            if ((float) $this->request[$name] >= $count && $this->checkFirstError($name))
                 $this->setError($name, "max number equal or lower than $count character", "max");
     }
 
     protected function minNumber($name, $count)
     {
         if ($this->checkFieldExist($name))
-            if ($this->request[$name] >= $count && $this->checkFirstError($name))
+            if ((float) $this->request[$name] >= $count && $this->checkFirstError($name))
                 $this->setError($name, "min number equal or upper than $count character", "min");
     }
 

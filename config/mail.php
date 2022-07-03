@@ -7,9 +7,12 @@ return [
         "USERNAME" => "env",
         "PASSWORD" => "env",
         "PORT" => 0,
+        "TO" => [
+            "MAIL" => "ex"
+        ],
         "FROM" => [
-            "MAIL" => "notify@apantos.org",
-            "NAME" => "apantos"
+            "MAIL" => "ex",
+            "NAME" => "ex"
         ]
     ]
 ];
