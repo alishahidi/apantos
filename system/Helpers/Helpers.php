@@ -449,6 +449,17 @@ if (!function_exists("estimateReadingTimePrintPersian")) {
     }
 }
 
+if (!function_exists("objectToArray")) {
+    function objectToArray($object, $name)
+    {
+        $returnArray = [];
+        foreach($object as $obj){
+            array_push($returnArray, $obj->{$name});
+        }
+        return $returnArray;
+    }
+}
+
 function paginateViewRouteGenerator($routeUrl, $pageCount)
 {
     if (isset($_GET[0]))
