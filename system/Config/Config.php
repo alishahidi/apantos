@@ -2,6 +2,7 @@
 
 namespace System\Config;
 
+use Symfony\Component\Finder\Finder;
 
 class Config
 {
@@ -18,9 +19,11 @@ class Config
     {
         $dirSep = DIRECTORY_SEPARATOR;
         $configPath = dirname(dirname(__DIR__)) . "{$dirSep}config{$dirSep}";
-        foreach (glob($configPath . "*.php") as $fileName) {
-            $config = require $fileName;
-            $key = str_replace([$configPath, ".php"], "", $fileName);
+        $finder = new Finder();
+        $finder->files()->in($configPath);
+        foreach ($finder as $file) {
+            $config = require $file->getRealPath();
+            $key = str_replace([$configPath, ".php"], "", $file->getRealPath());
             $this->config_nested_array[$key] = $config;
         }
         $this->initialDefaultValues();
