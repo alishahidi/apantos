@@ -17,6 +17,7 @@
         "gregwar/captcha": "^1.1",
         "morilog/jalali": "^3.3",
         "symfony/finder": "^6.0",
-        "symfony/filesystem": "^6.0"
+        "symfony/filesystem": "^6.0",
+        "ezyang/htmlpurifier": "^4.14"
     }
 }

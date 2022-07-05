@@ -57,6 +57,15 @@ if (!function_exists("oldEqualValue")) {
     }
 }
 
+if (!function_exists("oldOrEqualValue")) {
+    function oldOrEqualValue($oldName, $value, $mainValue)
+    {
+        if(isset($_SESSION["tmp_old"][$oldName]))
+            return $_SESSION["tmp_old"][$oldName] === $value ? true : false;
+        return $value === $mainValue ? true : false;
+    }
+}
+
 if (!function_exists("oldOr")) {
     function oldOr($name, $value)
     {
@@ -307,6 +316,22 @@ if (!function_exists("d")) {
     function d($value)
     {
         return html_entity_decode($value);
+    }
+}
+
+if (!function_exists("hp")) {
+    function hp($value)
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($value);
+    }
+}
+
+if (!function_exists("hpd")) {
+    function hpd($value)
+    {
+        d(hp($value));
     }
 }
 
