@@ -24,7 +24,7 @@ trait HasSoftDelete
     {
         $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
         $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
-        $statement = $this->executeQUery();
+        $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
@@ -72,7 +72,7 @@ trait HasSoftDelete
             $this->setSql("SELECT $fields FROM {$this->getTableName()}");
         }
         $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
-        $statement = $this->executeQUery();
+        $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
@@ -98,7 +98,7 @@ trait HasSoftDelete
         if ($this->getSql() == "") {
             $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
         }
-        $statement = $this->executeQUery();
+        $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);

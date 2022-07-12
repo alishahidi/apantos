@@ -77,7 +77,7 @@ trait hasCRUD
         }
         $operator = "AND";
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
         return $this;
     }
 
@@ -98,7 +98,7 @@ trait hasCRUD
         }
         $operator = "OR";
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
         return $this;
     }
 
@@ -107,7 +107,7 @@ trait hasCRUD
         $condition = "{$this->getAttributeName($attribute)} IS NULL ";
         $operator = "AND";
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
         return $this;
     }
 
@@ -116,7 +116,7 @@ trait hasCRUD
         $condition = "{$this->getAttributeName($attribute)} IS NOT NULL ";
         $operator = "AND";
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
         return $this;
     }
 
@@ -130,8 +130,16 @@ trait hasCRUD
         $condition = "{$this->getAttributeName($attribute)} IN ({implode(', ', $valuesArray)})";
         $operator = "AND";
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
         return $this;
+    }
+
+    protected function whereBetweenMethod($attribute, $from, $to){
+       $condition = "{$this->getAttributeName($attribute)} BETWEEN $from AND $to";
+       $operator = "AND";
+       $this->setWhere($operator, $condition);
+       $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+       return $this;
     }
 
     protected function randomOrderMethod($expression){

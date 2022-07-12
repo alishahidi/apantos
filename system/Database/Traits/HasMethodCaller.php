@@ -4,9 +4,9 @@ namespace System\Database\Traits;
 
 trait HasMethodCaller
 {
-    private $allMethods = ["create", "update", "delete", "find", "all", "save", "where", "whereOr", "whereIn", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"];
+    private $allMethods = ["create", "update", "delete", "find", "all", "save", "where", "whereOr", "whereIn", "whereNull", "whereNotNull", "whereBetween", "limit", "orderBy", "randomOrder", "get", "paginate", "count"];
 
-    private $allowedMethods = ["create", "update", "delete", "find", "all", "save", "where", "whereOr", "whereIn", "whereNull", "whereNotNull", "limit", "orderBy", "randomOrder", "get", "paginate", "count"];
+    private $allowedMethods = ["create", "update", "delete", "find", "all", "save", "where", "whereOr", "whereIn", "whereNull", "whereNotNull", "whereBetween", "limit", "orderBy", "randomOrder", "get", "paginate", "count"];
 
     public function __call($method, $argvs)
     {
