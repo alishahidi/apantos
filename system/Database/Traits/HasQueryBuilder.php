@@ -40,7 +40,10 @@ trait HasQueryBuilder
 
     protected function setOrderBy($name, $expression)
     {
-        array_push($this->orderBy, "{$this->getAttributeName($name)} $expression");
+        if(strpos($name, "("))
+            array_push($this->orderBy, "$name, $expression");
+        else
+            array_push($this->orderBy, "{$this->getAttributeName($name)} $expression");
     }
 
     protected function resetOrderBy()

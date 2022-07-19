@@ -60,7 +60,7 @@ if (!function_exists("oldEqualValue")) {
 if (!function_exists("oldOrEqualValue")) {
     function oldOrEqualValue($oldName, $value, $mainValue)
     {
-        if(isset($_SESSION["tmp_old"][$oldName]))
+        if (isset($_SESSION["tmp_old"][$oldName]))
             return $_SESSION["tmp_old"][$oldName] === $value ? true : false;
         return $value === $mainValue ? true : false;
     }
@@ -232,7 +232,7 @@ if (!function_exists("route")) {
         $params = array_reverse($params);
         $routeParamsMatch = [];
         preg_match_all("/{[^}.]*}/", $route, $routeParamsMatch);
-        if (count($routeParamsMatch[0]) > count($params))
+        if ($params[0] && count($routeParamsMatch[0]) > count($params))
             throw new \Exception("route params not enough.");
         foreach ($routeParamsMatch[0] as $key => $routeMatch) {
             $route = str_replace($routeMatch, array_pop($params), $route);
@@ -331,7 +331,7 @@ if (!function_exists("hp")) {
 if (!function_exists("hpd")) {
     function hpd($value)
     {
-        d(hp($value));
+        return d(hp($value));
     }
 }
 
@@ -372,6 +372,12 @@ if (!function_exists("get_token")) {
     }
 }
 
+if (!function_exists("get_dir_token")) {
+    function get_dir_token()
+    {
+        return Security::getDirToken();
+    }
+}
 
 if (!function_exists("get_crypt_token")) {
     function get_crypt_token()
@@ -436,6 +442,16 @@ if (!function_exists("get_start_random_ip_token")) {
     }
 }
 
+if (!function_exists("get_gravatar")) {
+    function get_gravatar($email, $size = 50)
+    {
+        $url = 'https://www.gravatar.com/avatar/';
+        $url .= md5(strtolower(trim($email)));
+        $url .= "?s=$size";
+        return $url;
+    }
+}
+
 if (!function_exists("limitDotPrint")) {
     function limitDotPrint($string, $limtLen)
     {
@@ -478,8 +494,26 @@ if (!function_exists("objectToArray")) {
     function objectToArray($object, $name)
     {
         $returnArray = [];
-        foreach($object as $obj){
-            array_push($returnArray, $obj->{$name});
+        if (is_array($object)) {
+            foreach ($object as $obj) {
+                if (!is_array($name)) {
+                    array_push($returnArray, $obj->{$name});
+                    continue;
+                }
+                $tmpArr = [];
+                foreach ($name as $item) {
+                    $tmpArr[$item] = $obj->{$item};
+                }
+                array_push($returnArray, $tmpArr);
+                unset($tmpArr);
+            }
+        } else {
+            if (!is_array($name)) {
+                array_push($returnArray, $object->{$name});
+            }
+            foreach ($name as $item) {
+                $returnArray[$item] = $object->{$item};
+            }
         }
         return $returnArray;
     }

@@ -24,6 +24,11 @@ trait HasGetToken
         return Config::get("CRYPT_TOKEN");
     }
 
+    public static function getDirToken()
+    {
+        return Config::get("DIR_TOKEN");
+    }
+
     public static function getRandomToken()
     {
         return self::generateToken();
