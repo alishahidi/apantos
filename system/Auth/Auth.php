@@ -15,9 +15,9 @@ class Auth
   {
     if (!Session::get('user') && !Cookie::get("user"))
       return redirect(route(self::$redirectTo));
-    $userid = Cookie::get("user") ? Cookie::get("user")->id : Session::get('user');
-    Session::set("user", $userid);
-    $user = User::find($userid);
+    $userId = Cookie::get("user") ? Cookie::get("user")->id : Session::get('user');
+    Session::set("user", $userId);
+    $user = User::find($userId);
     if (!empty($user))
       return $user;
     Session::remove("user");
@@ -32,14 +32,26 @@ class Auth
     return false;
   }
 
+  public static function userUsingUsername($username)
+  {
+    $user = User::where("username", $username)->get()[0];
+    if (!empty($user))
+      return $user;
+    return false;
+  }
+
   public static function check()
   {
-    if (!Session::get("user"))
+    if (!Session::get("user") && !Cookie::get("user"))
       return redirect(route(self::$redirectTo));
-    $user = User::find(Session::get("user"));
-    if (!empty($user))
+    $userId = Cookie::get("user") ? Cookie::get("user")->id : Session::get('user');
+    $user = User::find($userId);
+    if (!empty($user)){
+      Session::set("user", $userId);
       return true;
+    }
     Session::remove("user");
+    Cookie::remove("user");
     return redirect(route(self::$redirectTo));
   }
 
@@ -77,6 +89,33 @@ class Auth
   public static function loginUsingEmail($email, $password, $notExistError = null, $wrongPassError = null, $remember = false, $validTime = null)
   {
     $user = User::where("email", $email)->get()[0];
+    if (empty($user)) {
+      if ($notExistError)
+        error("login", $notExistError);
+      else
+        error("login", "User not exist");
+      return back();
+    }
+    if (Security::cheackPassword($user->password, $password)) {
+      // if (!$user->is_active)
+      //   return 403;
+      if ($remember)
+        Cookie::set("user", ["id" => $user->id], $validTime);
+      Session::set("user", $user->id);
+      return true;
+    } else {
+      if ($wrongPassError)
+        error("login", $wrongPassError);
+      else
+        error("login", "Wrong password");
+      return back();
+    }
+  }
+
+
+  public static function loginUsingUsername($username, $password, $notExistError = null, $wrongPassError = null, $remember = false, $validTime = null)
+  {
+    $user = User::where("username", $username)->get()[0];
     if (empty($user)) {
       if ($notExistError)
         error("login", $notExistError);
