@@ -28,7 +28,7 @@ trait HasRunValidation
 
     protected function checkFileExist($name)
     {
-        return isset($this->files[$name]["name"]) && !empty($this->request[$name]["name"]);
+        return !empty($this->files[$name]["name"]) || !empty($this->request[$name]["name"]);
     }
 
     private function setError($name, $errorMessage, $ruleType = null)
