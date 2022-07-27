@@ -2,7 +2,6 @@
 
 namespace System\Database\Traits;
 
-
 trait HasAttributes
 {
     private function registerAttribute($object, string $attribute, $value)
@@ -12,13 +11,14 @@ trait HasAttributes
 
     protected function arrayToAttributes(array $array, $object = null)
     {
-        if(!$object){
+        if (! $object) {
             $className = get_called_class();
-            $object = new $className;
+            $object = new $className();
         }
-        foreach($array as $attribute => $value){
-            if($this->inHiddenAttributes($attribute))
-            continue;
+        foreach ($array as $attribute => $value) {
+            if ($this->inHiddenAttributes($attribute)) {
+                continue;
+            }
             $this->registerAttribute($object, $attribute, $value);
         }
 
@@ -26,10 +26,10 @@ trait HasAttributes
     }
 
     protected function arrayToObjects(array $array)
-    { 
+    {
         $collection = [];
 
-        foreach($array as $value){
+        foreach ($array as $value) {
             $object = $this->arrayToAttributes($value);
             array_push($collection, $object);
         }
@@ -44,21 +44,23 @@ trait HasAttributes
 
     protected function inCastAttributes($attribute)
     {
-        return $this->casts[$attribute] == "array" || $this->casts[$attribute] == "object";
+        return $this->casts[$attribute] == 'array' || $this->casts[$attribute] == 'object';
     }
 
     protected function castEncodeValue($attribute, $value)
     {
-        if($this->inCastAttributes($attribute))
-        return serialize($value); 
+        if ($this->inCastAttributes($attribute)) {
+            return serialize($value);
+        }
 
         return $value;
     }
 
     protected function castDecodeValue($attribute, $value)
     {
-        if($this->inCastAttributes($attribute))
-        return unserialize($value);
+        if ($this->inCastAttributes($attribute)) {
+            return unserialize($value);
+        }
 
         return $value;
     }
@@ -67,11 +69,10 @@ trait HasAttributes
     {
         $newArray = [];
 
-        foreach($values as $attribute => $value){
-            $this->inCastAttributes($attribute) ? $newArray[$attribute] = $this->castEncodeValue($attribute, $value): $newArray[$attribute] = $value;
+        foreach ($values as $attribute => $value) {
+            $this->inCastAttributes($attribute) ? $newArray[$attribute] = $this->castEncodeValue($attribute, $value) : $newArray[$attribute] = $value;
         }
 
         return $newArray;
-
     }
 }

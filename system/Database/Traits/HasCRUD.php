@@ -10,6 +10,7 @@ trait hasCRUD
     {
         $values = $this->arrayToCastEncodeValue($values);
         $this->arrayToAttributes($values, $this);
+
         return $this->saveMethod();
     }
 
@@ -17,6 +18,7 @@ trait hasCRUD
     {
         $values = $this->arrayToCastEncodeValue($values);
         $this->arrayToAttributes($values, $this);
+
         return $this->saveMethod();
     }
 
@@ -30,8 +32,9 @@ trait hasCRUD
         }
 
         $object->setSql("DELETE FROM {$object->getTableName()}");
-        $object->setWhere("AND", "{$object->getAttributeName($object->primaryKey)} = ?");
+        $object->setWhere('AND', "{$object->getAttributeName($object->primaryKey)} = ?");
         $object->addValue($object->primaryKey, $object->{$object->primaryKey});
+
         return $object->executeQuery();
     }
 
@@ -42,27 +45,31 @@ trait hasCRUD
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 
     protected function findMethod($id)
     {
         $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
-        $this->setWhere("AND", "{$this->getAttributeName($this->primaryKey)} = ?");
+        $this->setWhere('AND', "{$this->getAttributeName($this->primaryKey)} = ?");
         $this->addValue($this->primaryKey, $id);
         $statement = $this->executeQuery();
         $data = $statement->fetch();
-        $this->setAllowedMethods(["update", "delete", "save"]);
-        if ($data)
+        $this->setAllowedMethods(['update', 'delete', 'save']);
+        if ($data) {
             return $this->arrayToAttributes($data);
+        }
+
         return null;
     }
 
     protected function whereMethod($attribute, $firstValue, $secondValue = null)
     {
-        if (!isset($secondValue)) {
+        if (! isset($secondValue)) {
             $condition = "{$this->getAttributeName($attribute)} = ?";
             $this->addValue(
                 $attribute,
@@ -75,15 +82,16 @@ trait hasCRUD
                 $secondValue
             );
         }
-        $operator = "AND";
+        $operator = 'AND';
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
     protected function whereOrMethod($attribute, $firstValue, $secondValue = null)
     {
-        if (!isset($secondValue)) {
+        if (! isset($secondValue)) {
             $condition = "{$this->getAttributeName($attribute)} = ?";
             $this->addValue(
                 $attribute,
@@ -96,27 +104,30 @@ trait hasCRUD
                 $secondValue
             );
         }
-        $operator = "OR";
+        $operator = 'OR';
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
     protected function whereNullMethod($attribute)
     {
         $condition = "{$this->getAttributeName($attribute)} IS NULL ";
-        $operator = "AND";
+        $operator = 'AND';
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
     protected function whereNotNullMethod($attribute)
     {
         $condition = "{$this->getAttributeName($attribute)} IS NOT NULL ";
-        $operator = "AND";
+        $operator = 'AND';
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
@@ -125,72 +136,81 @@ trait hasCRUD
         $valuesArray = [];
         foreach ($values as $value) {
             $this->addValue($attribute, $value);
-            array_push($valuesArray, "?");
+            array_push($valuesArray, '?');
         }
         $condition = "{$this->getAttributeName($attribute)} IN ({implode(', ', $valuesArray)})";
-        $operator = "AND";
+        $operator = 'AND';
         $this->setWhere($operator, $condition);
-        $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
-    protected function whereBetweenMethod($attribute, $from, $to){
-       $condition = "{$this->getAttributeName($attribute)} BETWEEN $from AND $to";
-       $operator = "AND";
-       $this->setWhere($operator, $condition);
-       $this->setAllowedMethods(["where", "whereOr", "whereNull", "whereNotNull", "whereBetween", "whereIn", "limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
-       return $this;
+    protected function whereBetweenMethod($attribute, $from, $to)
+    {
+        $condition = "{$this->getAttributeName($attribute)} BETWEEN $from AND $to";
+        $operator = 'AND';
+        $this->setWhere($operator, $condition);
+        $this->setAllowedMethods(['where', 'whereOr', 'whereNull', 'whereNotNull', 'whereBetween', 'whereIn', 'limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
+        return $this;
     }
 
-    protected function randomOrderMethod($expression){
+    protected function randomOrderMethod($expression)
+    {
         array_push($this->orderBy, "RAND() $expression");
-        $this->setAllowedMethods(["limit", "orderBy", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['limit', 'orderBy', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
     protected function orderByMethod($attribute, $expression)
     {
         $this->setOrderBy($attribute, $expression);
-        $this->setAllowedMethods(["limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
     protected function setLimitMethod($from, $number)
     {
-        $this->limit["form"] = (int) $from;
-        $this->limit["number"] = (int) $number;
+        $this->limit['form'] = (int) $from;
+        $this->limit['number'] = (int) $number;
     }
 
     protected function resetLimitMethod()
     {
-        unset($this->limit["from"]);
-        unset($this->limit["number"]);
+        unset($this->limit['from']);
+        unset($this->limit['number']);
     }
 
     protected function limitMethod($from, $number)
     {
         $this->setLimit($from, $number);
-        $this->setAllowedMethods(["limit", "orderBy", "randomOrder", "get", "paginate", "count"]);
+        $this->setAllowedMethods(['limit', 'orderBy', 'randomOrder', 'get', 'paginate', 'count']);
+
         return $this;
     }
 
-    protected function countMethod(){
-        if($this->is_relation)
+    protected function countMethod()
+    {
+        if ($this->is_relation) {
             return $this->getRelationCount();
-        else
+        } else {
             return $this->getCount();
+        }
     }
 
     protected function getMethod($array = [])
     {
-        if ($this->sql == "") {
+        if ($this->sql == '') {
             if (empty($array)) {
                 $fields = "{$this->getTableName()}.*";
             } else {
                 foreach ($array as $key => $field) {
                     $array[$key] = $this->getAttributeName($field);
                 }
-                $fields = implode(", ", $array);
+                $fields = implode(', ', $array);
             }
             $this->setSql("SELECT $fields FROM {$this->getTableName()}");
         }
@@ -198,47 +218,52 @@ trait hasCRUD
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 
     protected function paginateMethod($perPage)
     {
-        if($this->is_relation)
+        if ($this->is_relation) {
             $totalRows = $this->getRelationCount();
-        else
+        } else {
             $totalRows = $this->getCount();
-        $currentPage = isset($_GET["_pageid"]) ? (int) $_GET["_pageid"] : 1;
+        }
+        $currentPage = isset($_GET['_pageid']) ? (int) $_GET['_pageid'] : 1;
         $totalPages = ceil($totalRows / $perPage);
         $currentPage = max(min($currentPage, $totalPages), 1);
         $currentRow = ($currentPage - 1) * $perPage;
         $this->setLimit($currentRow, $perPage);
-        if ($this->sql == "") {
+        if ($this->sql == '') {
             $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
         }
         $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 
     protected function saveMethod()
     {
         $fillString = $this->fill();
-        if (!isset($this->{$this->primaryKey}))
+        if (! isset($this->{$this->primaryKey})) {
             $this->setSql("INSERT INTO {$this->getTableName()} SET $fillString, {$this->getAttributeName($this->createdAt)} = now()");
-        else {
+        } else {
             $this->setSql("UPDATE {$this->getTableName()} SET $fillString, {$this->getAttributeName($this->updatedAt)} = now()");
-            $this->setWhere("AND", "{$this->getAttributeName($this->primaryKey)} = ?");
+            $this->setWhere('AND', "{$this->getAttributeName($this->primaryKey)} = ?");
             $this->addValue($this->primaryKey, $this->{$this->primaryKey});
         }
         $this->executeQuery();
         $this->resetQuery();
-        if (!isset($this->{$this->primaryKey})) {
+        if (! isset($this->{$this->primaryKey})) {
             $insertId = DBConnection::newInsertId();
             $this->insertId = $insertId;
             $object = $this->findMethod($insertId);
@@ -250,7 +275,8 @@ trait hasCRUD
             }
         }
         $this->resetQuery();
-        $this->setAllowedMethods(["update", "delete", "find"]);
+        $this->setAllowedMethods(['update', 'delete', 'find']);
+
         return $this;
     }
 
@@ -258,14 +284,17 @@ trait hasCRUD
     {
         $fillArray = [];
         foreach ($this->fillable as $attribute) {
-            if (!isset($this->$attribute))
+            if (! isset($this->$attribute)) {
                 continue;
-            if ($this->$attribute === "")
+            }
+            if ($this->$attribute === '') {
                 $this->$attribute = null;
+            }
             array_push($fillArray, "{$this->getAttributeName($attribute)} = ?");
             $this->inCastAttributes($attribute) ? $this->addValue($attribute, $this->castEncodeValue($attribute, $this->$attribute)) : $this->addValue($attribute, $this->$attribute);
         }
-        $fillString = implode(",", $fillArray);
+        $fillString = implode(',', $fillArray);
+
         return $fillString;
     }
 }

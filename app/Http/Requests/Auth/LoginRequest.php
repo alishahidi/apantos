@@ -9,13 +9,13 @@ class LoginRequest extends Request
     public function rules()
     {
         return [
-            "rules" => [
-                "email" => "required|email",
-                "password" => "required",
+            'rules' => [
+                'email' => 'required|email',
+                'password' => 'required',
             ],
-            "errors" => [
-                "email" => "required!some custom error|email!some custom error",
-            ]
+            'errors' => [
+                'email' => 'required!some custom error|email!some custom error',
+            ],
         ];
     }
 }

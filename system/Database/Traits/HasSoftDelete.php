@@ -14,8 +14,9 @@ trait HasSoftDelete
 
         if ($object) {
             $object->setSql("UPDATE {$object->getTableName()} SET {$this->getAttributeName($this->deletedAt)} = now() ");
-            $object->setWhere("AND", "{$object->getAttributeName($object->primaryKey)} = ?");
+            $object->setWhere('AND', "{$object->getAttributeName($object->primaryKey)} = ?");
             $object->addValue($object->primaryKey, $object->{$object->primaryKey});
+
             return $object->executeQuery();
         }
     }
@@ -23,23 +24,27 @@ trait HasSoftDelete
     protected function allMethod()
     {
         $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
-        $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
+        $this->setWhere('AND', "{$this->getAttributeName($this->deletedAt)} IS NULL ");
         $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 
     protected function countMethod()
     {
-        $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
-        if($this->is_relation)
+        $this->setWhere('AND', "{$this->getAttributeName($this->deletedAt)} IS NULL ");
+        if ($this->is_relation) {
             return $this->getRelationCount();
-        else
+        } else {
             return $this->getCount();
+        }
+
         return $this->getCount();
     }
 
@@ -47,63 +52,69 @@ trait HasSoftDelete
     {
         $this->resetQuery();
         $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
-        $this->setWhere("AND", "{$this->getAttributeName($this->primaryKey)} = ?");
+        $this->setWhere('AND', "{$this->getAttributeName($this->primaryKey)} = ?");
         $this->addValue($this->primaryKey, $id);
-        $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
+        $this->setWhere('AND', "{$this->getAttributeName($this->deletedAt)} IS NULL ");
         $statement = $this->executeQuery();
         $data = $statement->fetch();
-        $this->setAllowedMethods(["update", "delete", "save"]);
-        if ($data)
+        $this->setAllowedMethods(['update', 'delete', 'save']);
+        if ($data) {
             return $this->arrayToAttributes($data);
+        }
+
         return null;
     }
 
     protected function getMethod($array = [])
     {
-        if ($this->getSql() == "") {
+        if ($this->getSql() == '') {
             if (empty($array)) {
                 $fields = "{$this->getTableName()}.*";
             } else {
                 foreach ($array as $key => $field) {
                     $array[$key] = $this->getAttributeName($field);
                 }
-                $fields = implode(", ", $array);
+                $fields = implode(', ', $array);
             }
             $this->setSql("SELECT $fields FROM {$this->getTableName()}");
         }
-        $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
+        $this->setWhere('AND', "{$this->getAttributeName($this->deletedAt)} IS NULL ");
         $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 
     protected function paginateMethod($perPage)
     {
-
-        $this->setWhere("AND", "{$this->getAttributeName($this->deletedAt)} IS NULL ");
-        if($this->is_relation)
+        $this->setWhere('AND', "{$this->getAttributeName($this->deletedAt)} IS NULL ");
+        if ($this->is_relation) {
             $totalRows = $this->getRelationCount();
-        else
+        } else {
             $totalRows = $this->getCount();
-        $currentPage = isset($_GET["_pageid"]) ? (int) $_GET["_pageid"] : 1;
+        }
+        $currentPage = isset($_GET['_pageid']) ? (int) $_GET['_pageid'] : 1;
         $totalPages = ceil($totalRows / $perPage);
         $currentPage = min($currentPage, $totalPages);
         $currentPage = max($currentPage, 1);
         $currentRow = ($currentPage - 1) * $perPage;
         $this->setLimit($currentRow, $perPage);
-        if ($this->getSql() == "") {
+        if ($this->getSql() == '') {
             $this->setSql("SELECT {$this->getTableName()}.* FROM {$this->getTableName()}");
         }
         $statement = $this->executeQuery();
         $data = $statement->fetchAll();
         if ($data) {
             $this->arrayToObjects($data);
+
             return $this->collection;
         }
+
         return [];
     }
 }

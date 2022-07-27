@@ -43,7 +43,7 @@ class Mail
                     <td align="center" style="padding:0;">
                         <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
                         <tr>
-                            <td align="center" style="background:#70bbd9; background-image: url('. asset($img) .');height: 250px;width: 100%;background-position: center;background-size: cover;background-repeat: no-repeat;">
+                            <td align="center" style="background:#70bbd9; background-image: url('.asset($img).');height: 250px;width: 100%;background-position: center;background-size: cover;background-repeat: no-repeat;">
                             </td>
                         </tr>
                         <tr>
@@ -51,9 +51,9 @@ class Mail
                             <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
                                 <tr>
                                 <td style="padding:0 0 36px 0;color:#153643;">
-                                    <h1 style="font-size:24px;margin:0 0 20px 0;">'. $title .'</h1>
-                                    <p style="margin:0 0 12px 0;font-size:14.5px;line-height:24px;">'. $subtitle .'</p>
-                                    <p style="margin:0;font-size:14.5px;line-height:24px;"><a href="' . $link . '" style="color:#ee4c50;text-decoration:underline;">فعالسازی اکانت کاربری</a></p>
+                                    <h1 style="font-size:24px;margin:0 0 20px 0;">'.$title.'</h1>
+                                    <p style="margin:0 0 12px 0;font-size:14.5px;line-height:24px;">'.$subtitle.'</p>
+                                    <p style="margin:0;font-size:14.5px;line-height:24px;"><a href="'.$link.'" style="color:#ee4c50;text-decoration:underline;">فعالسازی اکانت کاربری</a></p>
                                 </td>
                                 </tr>
                             </table>
@@ -65,7 +65,7 @@ class Mail
                                 <tr>
                                 <td style="padding:0;width:50%;" align="left">
                                     <p style="margin:0;font-size:14px;line-height:14.5px;color:#ffffff;text-align:center;">
-                                    ' . Config::get("app.APP_TITLE") . '
+                                    '.Config::get('app.APP_TITLE').'
                                     </p>
                                 </td>
                                 </tr>
@@ -80,6 +80,6 @@ class Mail
         </html>
         ';
 
-        Notify::sendMail($to, $title . "-" . Config::get("app.APP_TITLE"), $template);
+        Notify::sendMail($to, $title.'-'.Config::get('app.APP_TITLE'), $template);
     }
 }

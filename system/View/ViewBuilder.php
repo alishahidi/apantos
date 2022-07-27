@@ -9,15 +9,20 @@ use System\View\Traits\HasViewLoader;
 
 class ViewBuilder
 {
-    use HasViewLoader, HasExtendsContent, HasIncludeContent, HasInputsContent;
+    use HasViewLoader;
+    use HasExtendsContent;
+    use HasIncludeContent;
+    use HasInputsContent;
 
     public $content;
+
     public $vars = [];
+
     private $isApts = true;
 
     public function run($filePath)
     {
-        $this->content =  $this->viewLoader($filePath);
+        $this->content = $this->viewLoader($filePath);
         if ($this->isApts) {
             $this->checkExtendsContent();
             $this->checkIncludesContent();

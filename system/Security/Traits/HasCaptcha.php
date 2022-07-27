@@ -9,8 +9,8 @@ trait HasCaptcha
 {
     public static function buildCaptcha()
     {
-        $captcha = new CaptchaBuilder;
-        $_SESSION["phrase"] = $captcha->getPhrase();
+        $captcha = new CaptchaBuilder();
+        $_SESSION['phrase'] = $captcha->getPhrase();
         header('Content-Type: image/jpeg');
         $captcha
             ->build()
@@ -23,11 +23,12 @@ trait HasCaptcha
         $captcha = new CaptchaBuilder();
         $_SESSION['phrase'] = $captcha->getPhrase();
         $captcha->build();
+
         return $captcha->inline();
     }
 
     public static function verifyCaptcha($userCaptchaCode)
     {
-        return PhraseBuilder::comparePhrases($_SESSION["phrase"], $userCaptchaCode);
+        return PhraseBuilder::comparePhrases($_SESSION['phrase'], $userCaptchaCode);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use Ramsey\Uuid\Uuid;
-use System\Config\Config;
 use System\Request\Request;
 
 class ImageUpload
@@ -12,11 +11,13 @@ class ImageUpload
     {
         $request = new Request();
         $dirSep = DIRECTORY_SEPARATOR;
-        $path = "images{$dirSep}{$dir}{$dirSep}" . date("Y{$dirSep}M{$dirSep}d");
+        $path = "images{$dirSep}{$dir}{$dirSep}".date("Y{$dirSep}M{$dirSep}d");
         $uuid = Uuid::uuid4()->toString();
-        $name = date("Y_m_d_M_i_s_") . $uuid;
-        if ($watermark)
+        $name = date('Y_m_d_M_i_s_').$uuid;
+        if ($watermark) {
             return $request->uploadImage($fileName, $path, $name, [$width, $height], $watermark);
+        }
+
         return $request->uploadImage($fileName, $path, $name, [$width, $height]);
     }
 
@@ -26,9 +27,11 @@ class ImageUpload
         $dirSep = DIRECTORY_SEPARATOR;
         $path = "images{$dirSep}{$dir}{$dirSep}";
         $uuid = Uuid::uuid4()->toString();
-        $name = date("Y_m_d_M_i_s_") . $uuid;
-        if ($watermark)
+        $name = date('Y_m_d_M_i_s_').$uuid;
+        if ($watermark) {
             return $request->uploadImage($fileName, $path, $name, [$width, $height], $watermark);
+        }
+
         return $request->uploadImage($fileName, $path, $name, [$width, $height]);
     }
 
@@ -36,9 +39,10 @@ class ImageUpload
     {
         $request = new Request();
         $dirSep = DIRECTORY_SEPARATOR;
-        $path = "editor{$dirSep}" . date("Y{$dirSep}M{$dirSep}d");
+        $path = "editor{$dirSep}".date("Y{$dirSep}M{$dirSep}d");
         $uuid = Uuid::uuid4()->toString();
-        $name = date("Y_m_d_M_i_s_") . $uuid;
+        $name = date('Y_m_d_M_i_s_').$uuid;
+
         return $request->uploadImage($fileName, $path, $name);
     }
 }

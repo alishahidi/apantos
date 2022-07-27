@@ -10,8 +10,9 @@ trait HasIncludeContent
     {
         while (true) {
             $includeNamesArray = $this->findIncludeNames();
-            if (empty($includeNamesArray))
+            if (empty($includeNamesArray)) {
                 break;
+            }
             foreach ($includeNamesArray as $includeName) {
                 $this->initialInclude($includeName);
             }
@@ -22,6 +23,7 @@ trait HasIncludeContent
     {
         $includeNamesArray = [];
         preg_match_all("/s*@include+\('([^)]+)'\)/", d($this->content), $includeNamesArray, PREG_UNMATCHED_AS_NULL);
+
         return isset($includeNamesArray[1]) ? $includeNamesArray[1] : false;
     }
 

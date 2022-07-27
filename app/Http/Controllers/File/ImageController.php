@@ -7,10 +7,9 @@ use App\Http\Services\ImageUpload;
 
 class ImageController extends Controller
 {
-
     public function upload()
     {
-        $image = ImageUpload::dateFormatUploadEditor("file");
+        $image = ImageUpload::dateFormatUploadEditor('file');
         echo json_encode(['location' => asset($image)]);
     }
 }

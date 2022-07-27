@@ -2,33 +2,36 @@
 
 namespace System\Request\Traits;
 
-
 trait HasRunValidation
 {
     protected function errorRedirect($redirect)
     {
-        if ($this->errorExist == false)
+        if ($this->errorExist == false) {
             return $this->request;
-        if ($redirect)
+        }
+        if ($redirect) {
             return back();
+        }
         safeHeader('HTTP/1.0 400 Bad Request', 'Problem in request. (check your input.)');
     }
 
     private function checkFirstError($name)
     {
-        if (!errorExists($name) && !in_array($name, $this->errorVariablesName))
+        if (! errorExists($name) && ! in_array($name, $this->errorVariablesName)) {
             return true;
+        }
+
         return false;
     }
 
     protected function checkFieldExist($name)
     {
-        return isset($this->request[$name]) && !empty($this->request[$name]);
+        return isset($this->request[$name]) && ! empty($this->request[$name]);
     }
 
     protected function checkFileExist($name)
     {
-        return !empty($this->files[$name]["name"]) || !empty($this->request[$name]["name"]);
+        return ! empty($this->files[$name]['name']) || ! empty($this->request[$name]['name']);
     }
 
     private function setError($name, $errorMessage, $ruleType = null)

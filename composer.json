@@ -18,6 +18,10 @@
         "morilog/jalali": "^3.3",
         "symfony/finder": "^6.0",
         "symfony/filesystem": "^6.0",
-        "ezyang/htmlpurifier": "^4.14"
+        "ezyang/htmlpurifier": "^4.14",
+        "league/flysystem-ftp": "^3.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.1"
     }
 }

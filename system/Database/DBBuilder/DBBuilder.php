@@ -8,6 +8,7 @@ use System\Database\DBConnection\DBConnection;
 class DBBuilder
 {
     private $priorty = null;
+
     private $migrations = [];
 
     public function __construct($priorty = null)
@@ -16,31 +17,32 @@ class DBBuilder
         $this->createMigrationTable();
         $this->makeMigrations();
         $this->createTables();
-        die("migrations run successfully");
+        exit('migrations run successfully');
     }
 
     private function createMigrationTable()
     {
         $dirSep = DIRECTORY_SEPARATOR;
-        $migrations = require __DIR__ . "{$dirSep}defaults{$dirSep}migrations.php";
+        $migrations = require __DIR__."{$dirSep}defaults{$dirSep}migrations.php";
         $pdoInstance = DBConnection::getDBConnectionInstance();
         foreach ($migrations as $migration) {
             $statement = $pdoInstance->prepare($migration);
             $statement->execute();
         }
-        return True;
+
+        return true;
     }
 
     private function makeMigrations()
     {
         $oldMigrationsArray = $this->getOldMigration();
-        $baseDir = Config::get("app.BASE_DIR");
+        $baseDir = Config::get('app.BASE_DIR');
         $dirSep = DIRECTORY_SEPARATOR;
         $migrationsDirectory = "{$baseDir}{$dirSep}database{$dirSep}migrations{$dirSep}";
-        $allMigrationsArray = glob($migrationsDirectory . "*.php");
+        $allMigrationsArray = glob($migrationsDirectory.'*.php');
         $oldDiffArray = [];
         foreach ($oldMigrationsArray as $oldMigration) {
-            array_push($oldDiffArray, $migrationsDirectory . $oldMigration["name"] . ".php");
+            array_push($oldDiffArray, $migrationsDirectory.$oldMigration['name'].'.php');
         }
         $newMigrationsArray = array_diff($allMigrationsArray, $oldDiffArray);
         $migrations = [];
@@ -65,7 +67,7 @@ class DBBuilder
         }
         $dbNewMigrationNames = [];
         foreach ($migrations as $migration) {
-            array_push($dbNewMigrationNames, str_replace([$migrationsDirectory, ".php"], "", $migration));
+            array_push($dbNewMigrationNames, str_replace([$migrationsDirectory, '.php'], '', $migration));
         }
         $this->setOldMigration($dbNewMigrationNames);
         $this->migrations = $sqlCodeArray;
@@ -73,11 +75,12 @@ class DBBuilder
 
     private function getOldMigration()
     {
-        $sql = "SELECT name FROM `migrations`";
+        $sql = 'SELECT name FROM `migrations`';
         $pdoInstance = DBConnection::getDBConnectionInstance();
         $statement = $pdoInstance->prepare($sql);
         $statement->execute();
         $migrations = $statement->fetchAll();
+
         return $migrations;
     }
 
@@ -85,7 +88,7 @@ class DBBuilder
     {
         $pdoInstance = DBConnection::getDBConnectionInstance();
         foreach ($migrations as $migration) {
-            $sql = "INSERT INTO `migrations` (`name`) VALUES(?)";
+            $sql = 'INSERT INTO `migrations` (`name`) VALUES(?)';
             $statement = $pdoInstance->prepare($sql);
             $statement->execute([$migration]);
         }
@@ -99,6 +102,7 @@ class DBBuilder
             $statement = $pdoInstance->prepare($migration);
             $statement->execute();
         }
-        return True;
+
+        return true;
     }
 }

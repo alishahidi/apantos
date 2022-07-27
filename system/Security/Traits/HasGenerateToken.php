@@ -14,6 +14,6 @@ trait HasGenerateToken
 
     public static function generateIpToken()
     {
-        return JWT::urlsafeB64Encode(hash("sha512", bin2hex(openssl_random_pseudo_bytes(32)) . self::ip()));
+        return JWT::urlsafeB64Encode(hash('sha512', bin2hex(openssl_random_pseudo_bytes(32)).self::ip()));
     }
 }

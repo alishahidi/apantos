@@ -1,6 +1,5 @@
 <?php
 
-
 namespace System\Ftp\FtpConnection;
 
 use League\Flysystem\Filesystem;
@@ -10,7 +9,6 @@ use System\Config\Config;
 
 class FtpConnection
 {
-
     private static $filesystem = null;
 
     private function __construct()
@@ -19,11 +17,11 @@ class FtpConnection
 
     public static function getFtpConnectionInstance()
     {
-
         if (self::$filesystem == null) {
             $connection = new FtpConnection();
             self::$filesystem = $connection->getFilesystem();
         }
+
         return self::$filesystem;
     }
 
@@ -31,20 +29,20 @@ class FtpConnection
     {
         return new Filesystem(new FtpAdapter(
             FtpConnectionOptions::fromArray([
-                'host' => Config::get("FTP_HOST"),
-                'root' => Config::get("FTP_ROOT"),
-                'username' => Config::get("FTP_USERNAME"),
-                'password' => Config::get("FTP_PASSWORD"),
-                'port' => (int) Config::get("FTP_PORT"),
+                'host' => Config::get('FTP_HOST'),
+                'root' => Config::get('FTP_ROOT'),
+                'username' => Config::get('FTP_USERNAME'),
+                'password' => Config::get('FTP_PASSWORD'),
+                'port' => (int) Config::get('FTP_PORT'),
                 'ssl' => false,
-                'timeout' => (int) Config::get("FTP_TIMEOUT"),
+                'timeout' => (int) Config::get('FTP_TIMEOUT'),
                 'utf8' => false,
                 'passive' => true,
                 'transferMode' => FTP_BINARY,
                 'systemType' => null,
                 'ignorePassiveAddress' => null,
                 'timestampsOnUnixListingsEnabled' => false,
-                'recurseManually' => true
+                'recurseManually' => true,
             ])
         ));
     }

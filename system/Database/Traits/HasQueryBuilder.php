@@ -6,22 +6,28 @@ use System\Database\DBConnection\DBConnection;
 
 trait HasQueryBuilder
 {
-
     public $sql = '';
+
     protected $where = [];
+
     private $orderBy = [];
+
     private $limit = [];
+
     private $values = [];
+
     private $bindValues = [];
 
     protected function setSql($query)
     {
         $this->sql = $query;
     }
+
     protected function getSql()
     {
         return $this->sql;
     }
+
     protected function resetSql()
     {
         $this->sql = '';
@@ -40,10 +46,11 @@ trait HasQueryBuilder
 
     protected function setOrderBy($name, $expression)
     {
-        if(strpos($name, "("))
+        if (strpos($name, '(')) {
             array_push($this->orderBy, "$name, $expression");
-        else
+        } else {
             array_push($this->orderBy, "{$this->getAttributeName($name)} $expression");
+        }
     }
 
     protected function resetOrderBy()
@@ -53,7 +60,6 @@ trait HasQueryBuilder
 
     protected function setLimit($from, $number)
     {
-
         $this->limit['from'] = (int) $from;
         $this->limit['number'] = (int) $number;
     }
@@ -63,7 +69,6 @@ trait HasQueryBuilder
         unset($this->limit['from']);
         unset($this->limit['number']);
     }
-
 
     protected function addValue($attribute, $value)
     {
@@ -76,7 +81,6 @@ trait HasQueryBuilder
         $this->values = [];
         $this->bindValues = [];
     }
-
 
     protected function resetQuery()
     {
@@ -91,67 +95,73 @@ trait HasQueryBuilder
     {
         $query = '';
         $query .= $this->sql;
-        if (!empty($this->where)) {
-
+        if (! empty($this->where)) {
             $whereString = '';
             foreach ($this->where as $where) {
-                $whereString == '' ?  $whereString .= $where['condition'] : $whereString .= ' ' . $where['operator'] . ' ' . $where['condition'];
+                $whereString == '' ? $whereString .= $where['condition'] : $whereString .= ' '.$where['operator'].' '.$where['condition'];
             }
-            $query .= ' WHERE ' . $whereString;
+            $query .= ' WHERE '.$whereString;
         }
-        if (!empty($this->orderBy)) {
-            $query .= ' ORDER BY ' . implode(', ', $this->orderBy);
+        if (! empty($this->orderBy)) {
+            $query .= ' ORDER BY '.implode(', ', $this->orderBy);
         }
-        if (!empty($this->limit)) {
-            $query .= ' limit ' . $this->limit['from'] . ' , ' . $this->limit['number'] . ' ';
+        if (! empty($this->limit)) {
+            $query .= ' limit '.$this->limit['from'].' , '.$this->limit['number'].' ';
         }
         $query .= ' ;';
         $pdoInstance = DBConnection::getDBConnectionInstance();
         $statement = $pdoInstance->prepare($query);
-        if (sizeof($this->bindValues) > sizeof($this->values))
-            sizeof($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
-        else
-            sizeof($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        if (count($this->bindValues) > count($this->values)) {
+            count($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
+        } else {
+            count($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        }
+
         return $statement;
     }
-
 
     protected function getCount()
     {
         $query = '';
         $query .= "SELECT COUNT(*) FROM {$this->getTableName()}";
-        if (!empty($this->where)) {
+        if (! empty($this->where)) {
             $whereString = '';
-            foreach ($this->where as $where)
-                $whereString == '' ?  $whereString .= $where['condition'] : $whereString .= ' ' . $where['operator'] . ' ' . $where['condition'];
-            $query .= ' WHERE ' . $whereString;
+            foreach ($this->where as $where) {
+                $whereString == '' ? $whereString .= $where['condition'] : $whereString .= ' '.$where['operator'].' '.$where['condition'];
+            }
+            $query .= ' WHERE '.$whereString;
         }
         $query .= ' ;';
         $pdoInstance = DBConnection::getDBConnectionInstance();
         $statement = $pdoInstance->prepare($query);
-        if (sizeof($this->bindValues) > sizeof($this->values))
-            sizeof($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
-        else
-            sizeof($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        if (count($this->bindValues) > count($this->values)) {
+            count($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
+        } else {
+            count($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        }
+
         return $statement->fetchColumn();
     }
 
     protected function getRelationCount()
     {
-        $query = str_replace("`b`.*", "COUNT(*)", $this->sql);
-        if (!empty($this->where)) {
+        $query = str_replace('`b`.*', 'COUNT(*)', $this->sql);
+        if (! empty($this->where)) {
             $whereString = '';
-            foreach ($this->where as $where)
-                $whereString == '' ?  $whereString .= $where['condition'] : $whereString .= ' ' . $where['operator'] . ' ' . $where['condition'];
-            $query .= ' WHERE ' . $whereString;
+            foreach ($this->where as $where) {
+                $whereString == '' ? $whereString .= $where['condition'] : $whereString .= ' '.$where['operator'].' '.$where['condition'];
+            }
+            $query .= ' WHERE '.$whereString;
         }
         $query .= ' ;';
         $pdoInstance = DBConnection::getDBConnectionInstance();
         $statement = $pdoInstance->prepare($query);
-        if (sizeof($this->bindValues) > sizeof($this->values))
-            sizeof($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
-        else
-            sizeof($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        if (count($this->bindValues) > count($this->values)) {
+            count($this->bindValues) > 0 ? $statement->execute($this->bindValues) : $statement->execute();
+        } else {
+            count($this->values) > 0 ? $statement->execute(array_values($this->values)) : $statement->execute();
+        }
+
         return $statement->fetchColumn();
     }
 
