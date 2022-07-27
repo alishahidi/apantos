@@ -3,9 +3,8 @@
 namespace System\Request\Traits;
 
 use Intervention\Image\ImageManagerStatic as Image;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use System\Config\Config;
+use System\Ftp\Ftp;
 
 trait HasFileManager
 {
@@ -43,7 +42,7 @@ trait HasFileManager
         if (!$file["tmp_name"])
             return false;
         $path = trim($path, "\/") . DIRECTORY_SEPARATOR;
-        $name = trim($name, "\/") . "." . pathinfo($file["name"], PATHINFO_EXTENSION);
+        $name = trim($name, "\/") . "." . "jpg";
         if (!is_dir($path))
             if (!mkdir($path, recursive: true))
                 dd("Faild to create directory.");
@@ -60,7 +59,29 @@ trait HasFileManager
             $watermarkImage = Image::make(Config::get("app.BASE_DIR") . "{$dirsep}storage{$dirsep}" . $watermark["file"])->fit($watermark["width"], $watermark["height"]);
             $image->insert($watermarkImage, $watermark["pos"], $watermark["x"], $watermark["y"]);
         }
-        $image->save($path . $name, Config::get("image.QUALITY"));
+        $image->save($path . $name, Config::get("image.QUALITY"), "jpg");
         return DIRECTORY_SEPARATOR . $path . $name;
+    }
+
+    public function uploadImageFtp($fileName, $path, $name, $widthHeight = [], $watermark = null)
+    {
+        $file = $this->file($fileName);
+        if (!$file["tmp_name"])
+            return false;
+        $path = trim($path, "\/") . DIRECTORY_SEPARATOR;
+        $name = trim($name, "\/") . "." . pathinfo($file["name"], PATHINFO_EXTENSION);
+        Image::configure(["driver" => "gd"]);
+        if (!empty($widthHeight))
+            $image = Image::make($file["tmp_name"])->fit($widthHeight[0], $widthHeight[1]);
+        else
+            $image = Image::make($file["tmp_name"]);
+
+        if ($watermark) {
+            $dirsep = DIRECTORY_SEPARATOR;
+            $watermarkImage = Image::make(Config::get("app.BASE_DIR") . "{$dirsep}storage{$dirsep}" . $watermark["file"])->fit($watermark["width"], $watermark["height"]);
+            $image->insert($watermarkImage, $watermark["pos"], $watermark["x"], $watermark["y"]);
+        }
+        $imageContent = $image->encode("jpg", Config::get("image.QUALITY"));
+        return Ftp::put($path . $name, $imageContent);
     }
 }

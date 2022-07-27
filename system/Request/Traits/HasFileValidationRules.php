@@ -38,7 +38,7 @@ trait HasFileValidationRules
     protected function fileType($name, $typesArray)
     {
         if ($this->checkFirstError($name) && $this->checkFileExist($name)) {
-            $currentFileType = explode("/", $this->files[$name]["type"])[1];
+            $currentFileType = pathinfo($this->files[$name]["name"], PATHINFO_EXTENSION);
             if (!in_array($currentFileType, $typesArray))
                 $this->setError($name, "$name type must be {implode(', ', $typesArray)}", "mimes");
         }

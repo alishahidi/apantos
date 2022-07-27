@@ -4,8 +4,6 @@ namespace System\Security\Traits;
 
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
-use System\Request\Request;
-use System\Session\Session;
 
 trait HasCaptcha
 {

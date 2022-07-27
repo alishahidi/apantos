@@ -198,6 +198,14 @@ if (!function_exists("asset")) {
     }
 }
 
+
+if (!function_exists("asset_ftp")) {
+    function asset_ftp($src)
+    {
+        return trim(Config::get("FTP_URL"), "\/") . "/" . trim($src, "\/");
+    }
+}
+
 if (!function_exists("url")) {
     function url($url)
     {
@@ -331,7 +339,7 @@ if (!function_exists("hp")) {
 if (!function_exists("hpd")) {
     function hpd($value)
     {
-        return d(hp($value));
+        return d(hp(d($value)));
     }
 }
 
@@ -439,6 +447,13 @@ if (!function_exists("get_start_random_ip_token")) {
     function get_start_random_ip_token()
     {
         return Security::getStartRandomIpToken();
+    }
+}
+
+if (!function_exists("verify_password")) {
+    function verify_password($password)
+    {
+        return Security::verifyPassword($password);
     }
 }
 
