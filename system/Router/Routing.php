@@ -88,9 +88,13 @@ class Routing
 
     public function error404()
     {
-        $dirSep = DIRECTORY_SEPARATOR;
         http_response_code(404);
-        include __DIR__."{$dirSep}View{$dirSep}404.php";
+        $view404 = Config::get('app.ERRORS.404');
+        if ($view404) {
+            view($view404);
+        } else {
+            view('errors.404');
+        }
         exit;
     }
 
