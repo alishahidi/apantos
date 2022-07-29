@@ -127,3 +127,52 @@ ex: files used for packages
 ** system
 
 kernel of framework
+
+* Routing system
+
+all routes available in *routes/{web, api}.php* file
+
+** How create route
+
+*** Note
+
+web route start from */*
+api routes start from */api*
+
+*** Argvs
+
+1. url
+2. Controller with namespace & class function name after @
+3. route name
+
+*** Get
+
+#+begin_src php
+
+  Route::get('/', "Home\HomeController@index", 'home.index');
+
+#+end_src
+
+*** Post
+
+#+begin_src php
+
+  Route::post('/login', "Auth\LoginController@login", 'auth.login');
+
+#+end_src
+
+*** Put
+
+#+begin_src php
+
+  Route::put('/admin/article/update/{id}', "Admin\ArticleController@update", 'admin.article.update');
+
+#+end_src
+
+*** Delete
+
+#+begin_src php
+
+  Route::delete('/admin/article/delete/{id}', "Admin\ArticleController@destroy", 'admin.article.delete');
+
+#+end_src
