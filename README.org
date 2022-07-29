@@ -7,6 +7,15 @@
 
 Apantos is a fast and simple framework based on php with security methods and dedicated orm. Modularly
 
+
+* What is framework architecture ?
+
+this framework use mvc architecture
+
+models in *app/Models*
+views in *resources/view*
+controllers in *app/Controllers*
+
 * Directory Structure
 - app
   - Http
@@ -38,6 +47,7 @@ Apantos is a fast and simple framework based on php with security methods and de
 
 
 * Directory explanation
+
 ** app
 
 Important directory contain controllers and request and .... for manage routes handlers and check form input and more
@@ -50,16 +60,70 @@ Contain web request handlers and services
 
 Management classes for routes
 
-standar name: =NameController.php=
+standard name: =NameController.php=
 
 **** Request
 
 User input checkers
 
-standar name: =NameRequest.php=
+standard name: =NameRequest.php=
 
-**** Providers
+**** Services
+
+Refactored classes
+
+standard name: =Name.php=
+
+*** Models
+
+Database Models
+
+standard name =Name.php= *Use singular nouns*
+
+*** Providers
 
 Providers run each request if stored in config file
 
-standar name: =NameProvider.php=
+standard name: =NameProvider.php=
+
+** bootstrap
+
+contain =bootstrap.php= file
+
+The job of this file is to load the framework
+
+** public
+
+this direcotry serve as root directory
+
+every request must be redirect to =index.php= file
+
+** resources
+
+contain view direcotry
+
+*** view
+
+contain views direcotry & php file
+
+standard name for use apts template engine: =view.apts.php=
+standard name for normal use without template engine: =view.php=
+
+** routes
+
+*** web.php
+
+for web request routes
+
+*** api.php
+
+for api request routes
+
+** storage
+
+for in project files
+ex: files used for packages
+
+** system
+
+kernel of framework
