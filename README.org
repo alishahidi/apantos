@@ -1,0 +1,65 @@
+#+TITLE: Apantos doc - main
+#+AUTHOR: Ali Shahidi
+#+DESCRIPTION: Apantos document main page
+#+OPTIONS: num:nil ^:{}
+
+* What is apantos
+
+Apantos is a fast and simple framework based on php with security methods and dedicated orm. Modularly
+
+* Directory Structure
+- app
+  - Http
+    - Controllers
+    - Request
+    - Services
+  - Models
+  - Providers
+- bootstrap
+  - /bootstrap.php/
+- config
+  - /app.php/
+  - /database.php/
+  - /image.php/
+  - /mail.php/
+- database
+  - migrations
+- public
+  - /index.php/
+- resources
+  - view
+- routes
+  - /api.php/
+  - /web.php/
+- storage
+  - fonts
+  - images
+- system
+
+
+* Directory explanation
+** app
+
+Important directory contain controllers and request and .... for manage routes handlers and check form input and more
+
+*** Http
+
+Contain web request handlers and services
+
+**** Controllers
+
+Management classes for routes
+
+standar name: =NameController.php=
+
+**** Request
+
+User input checkers
+
+standar name: =NameRequest.php=
+
+**** Providers
+
+Providers run each request if stored in config file
+
+standar name: =NameProvider.php=
