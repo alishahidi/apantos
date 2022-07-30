@@ -18,6 +18,8 @@
   - [[#system][system]]
 - [[#routing-system][Routing system]]
   - [[#how-create-route][How create route]]
+- [[#controllers][Controllers]]
+- [[#model][Model]]
 
 * What is apantos
 
@@ -165,7 +167,7 @@ api routes start from */api*
 
 #+begin_src php
 
-  Route::get('/', "Home\HomeController@index", 'home.index');
+Route::get('/', "Home\HomeController@index", 'home.index');
 
 #+end_src
 
@@ -173,7 +175,7 @@ api routes start from */api*
 
 #+begin_src php
 
-  Route::post('/login', "Auth\LoginController@login", 'auth.login');
+Route::post('/login', "Auth\LoginController@login", 'auth.login');
 
 #+end_src
 
@@ -181,7 +183,7 @@ api routes start from */api*
 
 #+begin_src php
 
-  Route::put('/admin/article/update/{id}', "Admin\ArticleController@update", 'admin.article.update');
+Route::put('/admin/article/update/{id}', "Admin\ArticleController@update", 'admin.article.update');
 
 #+end_src
 
@@ -189,6 +191,72 @@ api routes start from */api*
 
 #+begin_src php
 
-  Route::delete('/admin/article/delete/{id}', "Admin\ArticleController@destroy", 'admin.article.delete');
+Route::delete('/admin/article/delete/{id}', "Admin\ArticleController@destroy",'admin.article.delete');
 
 #+end_src
+
+
+* Controllers
+
+controllers called by routing system
+
+controllers must be set in =Route= method
+
+create your Controllers in *app/Http/Controller* like this
+
+#+begin_src php
+
+namespace App\Http\Controllers\Home;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return "Hi";
+    }
+}
+
+#+end_src
+
+for use this example you must set Route for called index method in HomeController
+
+#+begin_src php
+
+Route::get('/', "Home\HomeController@index", 'home.index');
+
+#+end_src
+
+now if open */* url in your browser you can see "Hi" message;
+
+* Model
+
+create your models in *app/Models* like this
+
+#+begin_src php
+
+namespace App\Models;
+
+use System\Database\ORM\Model;
+use System\Database\Traits\HasSoftDelete;
+
+class User extends Model
+{
+    use HasSoftDelete;
+
+    protected $table = 'users';
+
+    protected $fillable = ['name', 'email', 'password', 'avatar', 'permissions', 'bio'];
+
+    protected $casts = ['permission' => 'arrray']
+}
+
+#+end_src
+
+use *Use singular nouns* for Model name and set full name of table in =protected $table=
+
+you must set fillable table column in =protected $fillable=
+id, create_at, updated_at, deleted_at exist by default in fillables
+
+*casts* can convert arrays to safe string for stored in database and can convert string to array when you get record from database
