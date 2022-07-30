@@ -5,7 +5,7 @@ use System\Config\Config;
 use System\Dot\Dot;
 use System\Security\Security;
 
-if (! function_exists('view')) {
+if (!function_exists('view')) {
     function view($dir, $vars = [])
     {
         $viewBuilder = new \System\View\ViewBuilder();
@@ -20,14 +20,14 @@ if (! function_exists('view')) {
     }
 }
 
-if (! function_exists('dot')) {
+if (!function_exists('dot')) {
     function dot($items)
     {
         return new Dot($items);
     }
 }
 
-if (! function_exists('dd')) {
+if (!function_exists('dd')) {
     function dd($data, $exit = true)
     {
         dump($data);
@@ -37,28 +37,28 @@ if (! function_exists('dd')) {
     }
 }
 
-if (! function_exists('html')) {
+if (!function_exists('html')) {
     function html($text)
     {
         return html_entity_decode($text);
     }
 }
 
-if (! function_exists('old')) {
+if (!function_exists('old')) {
     function old($name)
     {
         return isset($_SESSION['tmp_old'][$name]) ? $_SESSION['tmp_old'][$name] : null;
     }
 }
 
-if (! function_exists('oldEqualValue')) {
+if (!function_exists('oldEqualValue')) {
     function oldEqualValue($oldName, $value)
     {
-        return ! empty($_SESSION['tmp_old'][$oldName]) && $_SESSION['tmp_old'][$oldName] === $value ? true : false;
+        return !empty($_SESSION['tmp_old'][$oldName]) && $_SESSION['tmp_old'][$oldName] === $value ? true : false;
     }
 }
 
-if (! function_exists('oldOrEqualValue')) {
+if (!function_exists('oldOrEqualValue')) {
     function oldOrEqualValue($oldName, $value, $mainValue)
     {
         if (isset($_SESSION['tmp_old'][$oldName])) {
@@ -69,18 +69,18 @@ if (! function_exists('oldOrEqualValue')) {
     }
 }
 
-if (! function_exists('oldOr')) {
+if (!function_exists('oldOr')) {
     function oldOr($name, $value)
     {
         return isset($_SESSION['tmp_old'][$name]) ? $_SESSION['tmp_old'][$name] : $value;
     }
 }
 
-if (! function_exists('flash')) {
+if (!function_exists('flash')) {
     function flash($name, $message = null)
     {
         if (empty($message)) {
-            if (! isset($_SESSION['tmp_flash'][$name])) {
+            if (!isset($_SESSION['tmp_flash'][$name])) {
                 return false;
             }
             $tmp = $_SESSION['tmp_flash'][$name];
@@ -93,7 +93,7 @@ if (! function_exists('flash')) {
     }
 }
 
-if (! function_exists('flashExists')) {
+if (!function_exists('flashExists')) {
     function flashExists($name = null)
     {
         if ($name) {
@@ -104,17 +104,17 @@ if (! function_exists('flashExists')) {
     }
 }
 
-if (! function_exists('getFlash')) {
+if (!function_exists('getFlash')) {
     function getFlash($name)
     {
         return isset($_SESSION['tmp_flash'][$name]) ? $_SESSION['tmp_flash'][$name] : null;
     }
 }
 
-if (! function_exists('allFlashes')) {
+if (!function_exists('allFlashes')) {
     function allFlashes()
     {
-        if (! isset($_SESSION['tmp_flash'])) {
+        if (!isset($_SESSION['tmp_flash'])) {
             return false;
         }
         $tmp = $_SESSION['tmp_flash'];
@@ -124,11 +124,11 @@ if (! function_exists('allFlashes')) {
     }
 }
 
-if (! function_exists('error')) {
+if (!function_exists('error')) {
     function error($name, $message = null)
     {
         if (empty($message)) {
-            if (! isset($_SESSION['tmp_error'][$name])) {
+            if (!isset($_SESSION['tmp_error'][$name])) {
                 return false;
             }
             $tmp = $_SESSION['tmp_error'][$name];
@@ -141,7 +141,7 @@ if (! function_exists('error')) {
     }
 }
 
-if (! function_exists('errorExists')) {
+if (!function_exists('errorExists')) {
     function errorExists($name = null)
     {
         if ($name) {
@@ -152,10 +152,10 @@ if (! function_exists('errorExists')) {
     }
 }
 
-if (! function_exists('allErrors')) {
+if (!function_exists('allErrors')) {
     function allErrors()
     {
-        if (! isset($_SESSION['tmp_error'])) {
+        if (!isset($_SESSION['tmp_error'])) {
             return false;
         }
         $tmp = $_SESSION['tmp_error'];
@@ -165,14 +165,14 @@ if (! function_exists('allErrors')) {
     }
 }
 
-if (! function_exists('currentDomain')) {
+if (!function_exists('currentDomain')) {
     function currentDomain()
     {
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST'];
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://' . $_SERVER['HTTP_HOST'] : 'http://' . $_SERVER['HTTP_HOST'];
     }
 }
 
-if (! function_exists('safeHeader')) {
+if (!function_exists('safeHeader')) {
     function safeHeader($header, $message = null)
     {
         header($header);
@@ -183,7 +183,7 @@ if (! function_exists('safeHeader')) {
     }
 }
 
-if (! function_exists('redirect')) {
+if (!function_exists('redirect')) {
     function redirect($url)
     {
         $url = trim($url, '/ ');
@@ -193,7 +193,7 @@ if (! function_exists('redirect')) {
     }
 }
 
-if (! function_exists('back')) {
+if (!function_exists('back')) {
     function back($routeName = null)
     {
         $route = isset($routeName) ? route($routeName) : null;
@@ -203,7 +203,7 @@ if (! function_exists('back')) {
     }
 }
 
-if (! function_exists('backUrl')) {
+if (!function_exists('backUrl')) {
     function backUrl($routeName = null)
     {
         $route = isset($routeName) ? route($routeName) : null;
@@ -212,28 +212,28 @@ if (! function_exists('backUrl')) {
     }
 }
 
-if (! function_exists('asset')) {
+if (!function_exists('asset')) {
     function asset($src)
     {
-        return currentDomain().'/'.trim($src, '/');
+        return currentDomain() . '/' . trim($src, '/');
     }
 }
 
-if (! function_exists('asset_ftp')) {
+if (!function_exists('asset_ftp')) {
     function asset_ftp($src)
     {
-        return trim(Config::get('FTP_URL'), "\/").'/'.trim($src, "\/");
+        return trim(Config::get('FTP_URL'), "\/") . '/' . trim($src, "\/");
     }
 }
 
-if (! function_exists('url')) {
+if (!function_exists('url')) {
     function url($url)
     {
-        return currentDomain().'/'.trim($url, '/');
+        return currentDomain() . '/' . trim($url, '/');
     }
 }
 
-if (! function_exists('findRouteByName')) {
+if (!function_exists('findRouteByName')) {
     function findRouteByName($name)
     {
         global $routes;
@@ -250,10 +250,10 @@ if (! function_exists('findRouteByName')) {
     }
 }
 
-if (! function_exists('route')) {
+if (!function_exists('route')) {
     function route($name, $params = [])
     {
-        if (! is_array($params)) {
+        if (!is_array($params)) {
             throw new \Exception('route params must be array.');
         }
         $route = findRouteByName($name);
@@ -270,11 +270,11 @@ if (! function_exists('route')) {
             $route = str_replace($routeMatch, array_pop($params), $route);
         }
 
-        return currentDomain().'/'.trim($route, ' /');
+        return currentDomain() . '/' . trim($route, ' /');
     }
 }
 
-if (! function_exists('safeRoute')) {
+if (!function_exists('safeRoute')) {
     function safeRoute($name)
     {
         $route = findRouteByName($name);
@@ -282,11 +282,11 @@ if (! function_exists('safeRoute')) {
             throw new \Exception("route $name not found.");
         }
 
-        return currentDomain().'/'.trim($route, ' /');
+        return currentDomain() . '/' . trim($route, ' /');
     }
 }
 
-if (! function_exists('methodField')) {
+if (!function_exists('methodField')) {
     function methodField()
     {
         $method_field = strtolower($_SERVER['REQUEST_METHOD']);
@@ -304,14 +304,14 @@ if (! function_exists('methodField')) {
     }
 }
 
-if (! function_exists('getMethod')) {
+if (!function_exists('getMethod')) {
     function getMethod()
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 }
 
-if (! function_exists('array_dot')) {
+if (!function_exists('array_dot')) {
     function array_dot($array, $return_array = [], $return_key = '')
     {
         foreach ($array as $key => $value) {
@@ -326,17 +326,17 @@ if (! function_exists('array_dot')) {
     }
 }
 
-if (! function_exists('currentUrl')) {
+if (!function_exists('currentUrl')) {
     function currentUrl()
     {
-        return currentDomain().$_SERVER['REQUEST_URI'];
+        return currentDomain() . $_SERVER['REQUEST_URI'];
     }
 }
 
-if (! function_exists('equalUrl')) {
+if (!function_exists('equalUrl')) {
     function equalUrl($url, $contain = false, $containUrl = null)
     {
-        if (! $contain) {
+        if (!$contain) {
             return currentUrl() == $url;
         }
         if ($containUrl) {
@@ -347,21 +347,21 @@ if (! function_exists('equalUrl')) {
     }
 }
 
-if (! function_exists('e')) {
+if (!function_exists('e')) {
     function e($value)
     {
         return htmlentities($value);
     }
 }
 
-if (! function_exists('d')) {
+if (!function_exists('d')) {
     function d($value)
     {
         return html_entity_decode($value);
     }
 }
 
-if (! function_exists('hp')) {
+if (!function_exists('hp')) {
     function hp($value)
     {
         $config = HTMLPurifier_Config::createDefault();
@@ -371,28 +371,35 @@ if (! function_exists('hp')) {
     }
 }
 
-if (! function_exists('hpd')) {
+if (!function_exists('hpd')) {
     function hpd($value)
     {
         return d(hp(d($value)));
     }
 }
 
-if (! function_exists('setOr')) {
+if (!function_exists('setOr')) {
     function setOr($issetValue, $replaceValue)
     {
         return $issetValue ? $issetValue : $replaceValue;
     }
 }
 
-if (! function_exists('publicPath')) {
-    function publicPath()
+if (!function_exists('dash_space')) {
+    function dash_space($string)
     {
-        return Config::get('app.BASE_DIR').DIRECTORY_SEPARATOR.'public';
+        return str_replace(' ', '-', strtolower($string));
     }
 }
 
-if (! function_exists('env')) {
+if (!function_exists('publicPath')) {
+    function publicPath()
+    {
+        return Config::get('app.BASE_DIR') . DIRECTORY_SEPARATOR . 'public';
+    }
+}
+
+if (!function_exists('env')) {
     function env($name, $default = null)
     {
         if ($default) {
@@ -403,35 +410,35 @@ if (! function_exists('env')) {
     }
 }
 
-if (! function_exists('get_rand_key')) {
+if (!function_exists('get_rand_key')) {
     function get_rand_key()
     {
         return md5(Uuid::uuid4()->toString());
     }
 }
 
-if (! function_exists('get_token')) {
+if (!function_exists('get_token')) {
     function get_token()
     {
         return Security::getToken();
     }
 }
 
-if (! function_exists('get_csrf')) {
+if (!function_exists('get_csrf')) {
     function get_csrf()
     {
         return Security::getCsrf();
     }
 }
 
-if (! function_exists('verify_password')) {
+if (!function_exists('verify_password')) {
     function verify_password($password)
     {
         return Security::verifyPassword($password);
     }
 }
 
-if (! function_exists('get_gravatar')) {
+if (!function_exists('get_gravatar')) {
     function get_gravatar($email, $size = 50)
     {
         $url = 'https://www.gravatar.com/avatar/';
@@ -442,20 +449,20 @@ if (! function_exists('get_gravatar')) {
     }
 }
 
-if (! function_exists('limitDotPrint')) {
+if (!function_exists('limitDotPrint')) {
     function limitDotPrint($string, $limtLen)
     {
         if (strlen($string) <= $limtLen) {
             $string = $string;
         } else {
-            $string = $string.' ....';
+            $string = $string . ' ....';
         }
 
         return $string;
     }
 }
 
-if (! function_exists('estimateReadingTime')) {
+if (!function_exists('estimateReadingTime')) {
     function estimateReadingTime($text, $wpm = 200)
     {
         $totalWords = str_word_count(strip_tags($text));
@@ -466,7 +473,7 @@ if (! function_exists('estimateReadingTime')) {
     }
 }
 
-if (! function_exists('estimateReadingTimePrint')) {
+if (!function_exists('estimateReadingTimePrint')) {
     function estimateReadingTimePrint($ms)
     {
         $minutes = $ms['m'];
@@ -476,7 +483,7 @@ if (! function_exists('estimateReadingTimePrint')) {
     }
 }
 
-if (! function_exists('estimateReadingTimePrintPersian')) {
+if (!function_exists('estimateReadingTimePrintPersian')) {
     function estimateReadingTimePrintPersian($ms)
     {
         $minutes = $ms['m'];
@@ -486,13 +493,13 @@ if (! function_exists('estimateReadingTimePrintPersian')) {
     }
 }
 
-if (! function_exists('objectToArray')) {
+if (!function_exists('objectToArray')) {
     function objectToArray($object, $name)
     {
         $returnArray = [];
         if (is_array($object)) {
             foreach ($object as $obj) {
-                if (! is_array($name)) {
+                if (!is_array($name)) {
                     array_push($returnArray, $obj->{$name});
                     continue;
                 }
@@ -504,7 +511,7 @@ if (! function_exists('objectToArray')) {
                 unset($tmpArr);
             }
         } else {
-            if (! is_array($name)) {
+            if (!is_array($name)) {
                 array_push($returnArray, $object->{$name});
             }
             foreach ($name as $item) {
@@ -522,9 +529,9 @@ function paginateViewRouteGenerator($routeUrl, $pageCount)
         return currentUrl();
     }
     $_GET['_pageid'] = $pageCount;
-    $getVariables = array_map(fn ($value, $key) => $key.'='.$value, $_GET, array_keys($_GET));
+    $getVariables = array_map(fn ($value, $key) => $key . '=' . $value, $_GET, array_keys($_GET));
 
-    return $routeUrl.'?'.implode('&', $getVariables);
+    return $routeUrl . '?' . implode('&', $getVariables);
 }
 
 function paginateView($count, $perPage, $beforeCount, $afterCount, $routeUrl, $view, $activeView, $linkName, $counterName, $beforeStaticValue = '&lt;', $afterStaticValue = '&gt;')
@@ -534,15 +541,30 @@ function paginateView($count, $perPage, $beforeCount, $afterCount, $routeUrl, $v
     $totalPages = ceil($totalRows / $perPage);
     $currentPage = max(min($currentPage, $totalPages), 1);
     $paginateView = '';
-    $paginateView .= $currentPage != 1 ? str_replace('{'.$counterName.'}', $afterStaticValue, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $currentPage - 1), $view)) : '';
+    $paginateView .= $currentPage != 1 ? str_replace('{' . $counterName . '}', $afterStaticValue, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $currentPage - 1), $view)) : '';
     for ($i = $currentPage - $beforeCount; $i <= $currentPage - 1; $i++) {
-        $paginateView .= $i >= 1 ? str_replace('{'.$counterName.'}', $i, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $i), $view)) : '';
+        $paginateView .= $i >= 1 ? str_replace('{' . $counterName . '}', $i, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $i), $view)) : '';
     }
-    $paginateView .= str_replace('{'.$counterName.'}', $currentPage, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $currentPage), $activeView));
+    $paginateView .= str_replace('{' . $counterName . '}', $currentPage, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $currentPage), $activeView));
     for ($i = $currentPage; $i <= $currentPage + $afterCount - 1; $i++) {
-        $paginateView .= ($i + 1 <= $totalPages) ? str_replace('{'.$counterName.'}', $i + 1, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $i + 1), $view)) : '';
+        $paginateView .= ($i + 1 <= $totalPages) ? str_replace('{' . $counterName . '}', $i + 1, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $i + 1), $view)) : '';
     }
-    $paginateView .= $currentPage != $totalPages ? str_replace('{'.$counterName.'}', $beforeStaticValue, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $currentPage + 1), $view)) : '';
+    $paginateView .= $currentPage != $totalPages ? str_replace('{' . $counterName . '}', $beforeStaticValue, str_replace('{' . $linkName . '}', paginateViewRouteGenerator($routeUrl, $currentPage + 1), $view)) : '';
 
     return $paginateView;
+}
+
+if (!function_exists('error_404')) {
+    function error_404()
+    {
+        http_response_code(404);
+        header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+        $view404 = Config::get('app.ERRORS.404');
+        if ($view404) {
+            view($view404);
+        } else {
+            view('errors.404');
+        }
+        exit;
+    }
 }
