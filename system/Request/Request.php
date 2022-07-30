@@ -76,10 +76,26 @@ class Request
         }
         $token = isset($_POST['_token']) ? $_POST['_token'] : $_GET['_token'];
         if (empty($token)) {
-            safeHeader('HTTP/1.0 400 Bad Request', 'Token not found in request');
+            http_response_code(400);
+            header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
+            $view400 = Config::get('app.ERRORS.400');
+            if ($view400) {
+                view($view400);
+            } else {
+                view('errors.400');
+            }
+            exit;
         }
-        if (! Security::verifyStartRandomIpToken($token)) {
-            safeHeader('HTTP/1.1 401 Unauthorized', 'Token not match');
+        if (! Security::veirfyCsrf($token)) {
+            http_response_code(401);
+            header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
+            $view401 = Config::get('app.ERRORS.401');
+            if ($view401) {
+                view($view401);
+            } else {
+                view('errors.401');
+            }
+            exit;
         }
 
         return true;

@@ -4,12 +4,12 @@ namespace System\Security;
 
 use System\Security\Traits\HasCaptcha;
 use System\Security\Traits\HasCrypt;
+use System\Security\Traits\HasCsrf;
 use System\Security\Traits\HasGenerateToken;
 use System\Security\Traits\HasGetToken;
 use System\Security\Traits\HasIp;
 use System\Security\Traits\HasJwt;
 use System\Security\Traits\HasPassword;
-use System\Security\Traits\HasStartToken;
 use System\Security\Traits\HasVerifyToken;
 
 class Security
@@ -17,7 +17,7 @@ class Security
     use HasGenerateToken;
     use HasGetToken;
     use HasIp;
-    use HasStartToken;
+    use HasCsrf;
     use HasVerifyToken;
     use HasPassword;
     use HasCrypt;

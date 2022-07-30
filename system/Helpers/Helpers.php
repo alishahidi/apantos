@@ -417,73 +417,10 @@ if (! function_exists('get_token')) {
     }
 }
 
-if (! function_exists('get_dir_token')) {
-    function get_dir_token()
+if (! function_exists('get_csrf')) {
+    function get_csrf()
     {
-        return Security::getDirToken();
-    }
-}
-
-if (! function_exists('get_crypt_token')) {
-    function get_crypt_token()
-    {
-        return Security::getCryptToken();
-    }
-}
-
-if (! function_exists('get_ip_token')) {
-    function get_ip_token()
-    {
-        return Security::getIpToken();
-    }
-}
-
-if (! function_exists('get_rand_token')) {
-    function get_rand_token()
-    {
-        return Security::getRandomToken();
-    }
-}
-
-if (! function_exists('get_rand_ip_token')) {
-    function get_rand_ip_token()
-    {
-        return Security::getRandomIpToken();
-    }
-}
-
-if (! function_exists('get_start_token')) {
-    function get_start_token()
-    {
-        return Security::getStartIpToken();
-    }
-}
-
-if (! function_exists('get_start_crypt_token')) {
-    function get_start_crypt_token()
-    {
-        return Security::getStartCryptToken();
-    }
-}
-
-if (! function_exists('get_start_ip_token')) {
-    function get_start_ip_token()
-    {
-        return Security::getStartIpToken();
-    }
-}
-
-if (! function_exists('get_start_random_crypt_token')) {
-    function get_start_random_crypt_token()
-    {
-        return Security::getStartRandomToken();
-    }
-}
-
-if (! function_exists('get_start_random_ip_token')) {
-    function get_start_random_ip_token()
-    {
-        return Security::getStartRandomIpToken();
+        return Security::getCsrf();
     }
 }
 

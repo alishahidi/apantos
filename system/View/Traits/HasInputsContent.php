@@ -9,7 +9,6 @@ trait HasInputsContent
     private function checkInputsContent()
     {
         $methodArray = $this->findMethods();
-        Security::startRandomIpToken();
         if ($methodArray) {
             foreach ($methodArray as $method) {
                 $this->initialMethod($method);
@@ -41,7 +40,7 @@ trait HasInputsContent
 
     private function initialToken()
     {
-        $token = get_start_random_ip_token();
+        $token = Security::getCsrf();
 
         return $this->content = str_replace('@token', "<input type='hidden' name='_token' value='$token'>", d($this->content));
     }

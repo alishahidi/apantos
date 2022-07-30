@@ -2,16 +2,28 @@
 
 namespace System\Session;
 
+use System\Security\Security;
+
 class Session
 {
-    public static function set($name, $value)
+    public static function set($name, $valueArray)
     {
-        $_SESSION[$name] = $value;
+        $_SESSION[$name] = Security::encrypt(Security::jwtEncode($valueArray));
     }
 
     public static function get($name)
     {
-        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
+        if (! isset($_SESSION[$name])) {
+            return false;
+        }
+        $token = $_SESSION[$name];
+        $payload = Security::jwtDecode(Security::decrypt($token));
+        if ($payload) {
+            return $payload;
+        }
+        self::remove($name);
+
+        return false;
     }
 
     public static function remove($name)

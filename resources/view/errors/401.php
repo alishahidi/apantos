@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>404 - page not found</title>
+    <title>401 - unauthorized</title>
     <style>
         *{
             margin: 0 auto;
@@ -36,8 +36,8 @@
 
     <section class="container">
         <section>
-            <h1 class="error_number">404</h1>
-            <p class="error_message">page not found</p>
+            <h1 class="error_number">401</h1>
+            <p class="error_message">unauthorized</p>
         </section>
     </section>
 

@@ -18,7 +18,7 @@ trait HasJwt
         ];
         $payload = array_merge($payload, $data);
 
-        return JWT::urlsafeB64Encode(JWT::encode($payload, self::getCryptToken(), 'HS256'));
+        return JWT::urlsafeB64Encode(JWT::encode($payload, self::getToken(), 'HS256'));
     }
 
     public static function jwtEncode($data)
@@ -28,13 +28,13 @@ trait HasJwt
         ];
         $payload = array_merge($payload, $data);
 
-        return JWT::urlsafeB64Encode(JWT::encode($payload, self::getCryptToken(), 'HS256'));
+        return JWT::urlsafeB64Encode(JWT::encode($payload, self::getToken(), 'HS256'));
     }
 
     public static function jwtDecode($token)
     {
         try {
-            return JWT::decode(JWT::urlsafeB64Decode($token), new Key(self::getCryptToken(), 'HS256'));
+            return JWT::decode(JWT::urlsafeB64Decode($token), new Key(self::getToken(), 'HS256'));
         } catch (\Exception $e) {
             return false;
         }

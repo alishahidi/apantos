@@ -89,6 +89,7 @@ class Routing
     public function error404()
     {
         http_response_code(404);
+        header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
         $view404 = Config::get('app.ERRORS.404');
         if ($view404) {
             view($view404);

@@ -13,11 +13,13 @@ class Auth
 
     public static function user()
     {
-        if (! Session::get('user') && ! Cookie::get('user')) {
+        $userInCookie = Cookie::get('user');
+        $userInSession = Session::get('user');
+        if (! $userInSession && ! $userInCookie) {
             return redirect(route(self::$redirectTo));
         }
-        $userId = Cookie::get('user') ? Cookie::get('user')->id : Session::get('user');
-        Session::set('user', $userId);
+        $userId = $userInCookie ? $userInCookie->id : $userInSession->id;
+        Session::set('user', ['id' => $userId]);
         $user = User::find($userId);
         if (! empty($user)) {
             return $user;
@@ -49,13 +51,15 @@ class Auth
 
     public static function check()
     {
-        if (! Session::get('user') && ! Cookie::get('user')) {
+        $userInCookie = Cookie::get('user');
+        $userInSession = Session::get('user');
+        if (! $userInSession && ! $userInCookie) {
             return redirect(route(self::$redirectTo));
         }
-        $userId = Cookie::get('user') ? Cookie::get('user')->id : Session::get('user');
+        $userId = $userInCookie ? $userInCookie->id : $userInSession->id;
         $user = User::find($userId);
         if (! empty($user)) {
-            Session::set('user', $userId);
+            Session::set('user', ['id' => $userId]);
 
             return true;
         }
@@ -67,11 +71,16 @@ class Auth
 
     public static function checkLogin()
     {
-        if (! Session::get('user')) {
+        $userInCookie = Cookie::get('user');
+        $userInSession = Session::get('user');
+        if (! $userInSession && ! $userInCookie) {
             return false;
         }
-        $user = User::find(Session::get('user'));
+        $userId = $userInCookie ? $userInCookie->id : $userInSession->id;
+        $user = User::find($userId);
         if (! empty($user)) {
+            Session::set('user', ['id' => $userId]);
+
             return true;
         }
 
@@ -119,7 +128,7 @@ class Auth
             if ($remember) {
                 Cookie::set('user', ['id' => $user->id], $validTime);
             }
-            Session::set('user', $user->id);
+            Session::set('user', ['id' => $user->id]);
 
             return true;
         } else {
@@ -151,7 +160,7 @@ class Auth
             if ($remember) {
                 Cookie::set('user', ['id' => $user->id], $validTime);
             }
-            Session::set('user', $user->id);
+            Session::set('user', ['id' => $user->id]);
 
             return true;
         } else {
@@ -173,7 +182,7 @@ class Auth
 
             return false;
         } else {
-            Session::set('user', $user->id);
+            Session::set('user', ['id' => $user->id]);
 
             return true;
         }
@@ -181,12 +190,12 @@ class Auth
 
     public static function checkLimitTimer($timerName, $cheackTime, $errorMessage, $errorName)
     {
-        if (Session::get($timerName) != false && (int) Session::get($timerName) > (int) time()) {
+        if (Session::get($timerName) != false && (int) Session::get($timerName)->time > (int) time()) {
             error($errorName, $errorMessage);
 
             return false;
         } else {
-            Session::set($timerName, time() + $cheackTime);
+            Session::set($timerName, ['time' => time() + $cheackTime]);
 
             return true;
         }
