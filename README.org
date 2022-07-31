@@ -20,6 +20,24 @@
   - [[#how-create-route][How create route]]
 - [[#controllers][Controllers]]
 - [[#model][Model]]
+- [[#orm][Orm]]
+  - [[#example-tables][Example tables]]
+  - [[#create][create]]
+  - [[#update][update]]
+  - [[#delete][delete]]
+  - [[#all][all]]
+  - [[#find][find]]
+  - [[#where][where]]
+  - [[#whereor][whereOr]]
+  - [[#wherenull][whereNull]]
+  - [[#wherenotnull][whereNotNull]]
+  - [[#wherein][whereIn]]
+  - [[#wherebetween][whereBetween]]
+  - [[#randomorder][randomOrder]]
+  - [[#orderby][orderBy]]
+  - [[#limit][limit]]
+  - [[#count][count]]
+  - [[#pagination][pagination]]
 
 * What is apantos
 
@@ -260,3 +278,329 @@ you must set fillable table column in =protected $fillable=
 id, create_at, updated_at, deleted_at exist by default in fillables
 
 *casts* can convert arrays to safe string for stored in database and can convert string to array when you get record from database
+
+* Orm
+
+** Example tables
+
+*** users
+
+| id | username | password | phone_number |
+|----+----------+----------+--------------|
+|  1 | ali      | test     |    +11843019 |
+|  2 | alex     | test     |   +32095u023 |
+|  3 | pop      | test     |     +3925253 |
+
+*** categories
+
+| id | name  |
+|----+-------|
+|  1 | linux |
+|  2 | emacs |
+|  3 | php   |
+
+*** posts
+
+| id | title         | cat_id | description                  |
+|----+---------------+--------+------------------------------|
+|  1 | post number 1 |      1 | description of post number 1 |
+|  2 | post 2        |      1 | description of post number 2 |
+|  3 | post number 3 |      2 | description of post number 3 |
+|  4 | post 4        |      3 | description of post number 4 |
+
+** create
+
+add record
+
+*** argvs
+1. values:array
+
+*** use
+
+#+begin_src php
+
+$user = User::create([
+    'username' => 'ali',
+    'password' => 'test',
+    'phone_number' => '+319021243'
+]);
+
+$insertId = $user->insertId;
+
+#+end_src
+
+or
+
+#+begin_src php
+
+$user = new User();
+$user->username = 'ali';
+$user->password = 'test';
+$user->phone_number = '+30231234401';
+$user->save();
+
+#+end_src
+
+** update
+
+update record
+
+*** argvs
+
+1. values:array => with primary id
+
+*** use
+
+#+begin_src php
+
+$user = User::update([
+    'id' => 1,
+    'username' => 'alishahidi'
+]);
+
+// change ali username to alishahidi
+
+#+end_src
+
+or
+
+#+begin_src php
+
+$user = User::find(1);
+$user->username = 'alishahidi';
+$user->save();
+
+#+end_src
+
+** delete
+
+delete record
+
+*** argvs
+1. primary id
+
+*** use
+
+#+begin_src php
+
+User::delete(1);
+
+#+end_src
+
+** all
+
+give all records
+
+*** use
+
+#+begin_src php
+
+$users = User::all();
+foreach($users as $user)
+    echo $user->useranem;
+
+// output
+
+    // ali
+    // alex
+    // pop
+
+#+end_src
+
+** find
+
+give user where id = $id
+
+*** argvs
+
+1. primary id
+
+*** use
+
+#+begin_src php
+
+$user = User::find(1);
+$username = $user->username; // return ali
+
+#+end_src
+
+** where
+
+add where condition in query
+
+*** argvs
+
+if pass 2 argument it set operatino to =
+1. attribute
+2. value
+
+if pass 3 argument it get operation from argument 2 and get value from argument 3
+1. attribute
+2. operatino
+3. value
+
+*** use
+
+#+begin_src php
+
+// get first record
+$post = Post::where('title', 'post number 1')->get()[0];
+$title = $post->title; // return "post number 1"
+
+#+end_src
+
+or
+
+#+begin_src php
+
+// return all record contain "number" in title
+$posts = Post::where('title', 'LIKE', "%number%")->get();
+foreach($posts as $post)
+    echo $post->title
+
+// output
+
+    // post number 1
+    // post number 3
+
+#+end_src
+
+** whereOr
+
+like =where= but with *OR* operation
+
+** whereNull
+
+*** argvs
+
+1. attribute
+
+*** use
+
+#+begin_src php
+
+// get records if cat_id is null
+$posts = Post::whereNull('cat_id')->get();
+
+#+end_src
+
+** whereNotNull
+
+*** argvs
+
+1. attribute
+
+*** use
+
+#+begin_src php
+
+// get records if cat_id is not null | is set
+$posts = Post::whereNotNull('cat_id')->get();
+
+#+end_src
+
+** whereIn
+
+*** argvs
+
+1. attribute
+2. values:array
+
+*** use
+
+#+begin_src php
+
+// get posts recotds if cat_id in 1, 2, 3
+$posts = Post::whereIn('cat_id', [1, 2, 3])->get();
+
+#+end_src
+
+** whereBetween
+
+*** argvs
+
+1. attribute
+2. from
+3. to
+
+*** use
+
+#+begin_src php
+
+// get records if id between 1..3
+$posts = Post::whereBetween('id', 1, 3)->get();
+
+#+end_src
+
+** randomOrder
+
+  randomize records order
+
+*** argvs
+
+1. expression
+
+*** use
+
+#+begin_src php
+
+$posts = Post::randomOrder('DESC')->get();
+
+#+end_src
+
+** orderBy
+
+*** argvs
+
+1. attribute
+2. expression
+
+*** use
+
+#+begin_src php
+
+$posts = Post:orderBy('created_at', 'DESC')->get();
+
+#+end_src
+
+** limit
+
+*** argvs
+
+1. from
+2. number
+
+*** use
+
+#+begin_src php
+
+// get first 3 records
+$posts = Post::limit(0, 3)->get();
+
+#+end_src
+
+** count
+
+*** use
+
+#+begin_src php
+
+// get cound of records
+$postsCount = Post::count(); // return 4
+
+#+end_src
+
+** pagination
+
+*** argvs
+
+1. perpage
+
+*** use
+
+#+begin_src php
+
+// auto convert page_id with $_GET['_pageid']
+$posts = Post::pagination(3);
+
+#+end_src
