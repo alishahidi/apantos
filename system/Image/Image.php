@@ -2,7 +2,6 @@
 
 namespace System\Image;
 
-use Intervention\Image\ImageManager;
 use System\Image\Traits\HasBuilder;
 
 class Image
@@ -51,5 +50,4 @@ class Image
     {
         $this->allowedMethods = $array;
     }
-
 }

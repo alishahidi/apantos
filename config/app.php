@@ -6,11 +6,11 @@ return [
     'CRYPT_TOKEN' => 'env',
     'BASE_URL' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST'],
     'BASE_DIR' => dirname(__DIR__),
-	 'ERRORS' => [
-		'400' => 'errors.400',
-		'401' => 'errors.401',
-		'404' => 'errors.404',
-	 ],
+    'ERRORS' => [
+        '400' => 'errors.400',
+        '401' => 'errors.401',
+        '404' => 'errors.404',
+    ],
     // providers
     'PROVIDERS' => [
         \App\Providers\AppServiceProvider::class,
