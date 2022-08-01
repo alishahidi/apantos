@@ -54,14 +54,14 @@ trait HasFileManager
         }
         Image::configure(['driver' => 'gd']);
         if (! empty($widthHeight)) {
-            $image = Image::make($file['tmp_name'])->fit($widthHeight[0], $widthHeight[1]);
+            $image = Image::make($file['tmp_name'])->resize($widthHeight[0], $widthHeight[1]);
         } else {
             $image = Image::make($file['tmp_name']);
         }
 
         if ($watermark) {
             $dirsep = DIRECTORY_SEPARATOR;
-            $watermarkImage = Image::make(Config::get('app.BASE_DIR')."{$dirsep}storage{$dirsep}".$watermark['file'])->fit($watermark['width'], $watermark['height']);
+            $watermarkImage = Image::make(Config::get('app.BASE_DIR')."{$dirsep}storage{$dirsep}".$watermark['file'])->resize($watermark['width'], $watermark['height']);
             $image->insert($watermarkImage, $watermark['pos'], $watermark['x'], $watermark['y']);
         }
         $image->save($path.$name, Config::get('image.QUALITY'), 'jpg');
@@ -79,14 +79,14 @@ trait HasFileManager
         $name = trim($name, "\/").'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
         Image::configure(['driver' => 'gd']);
         if (! empty($widthHeight)) {
-            $image = Image::make($file['tmp_name'])->fit($widthHeight[0], $widthHeight[1]);
+            $image = Image::make($file['tmp_name'])->resize($widthHeight[0], $widthHeight[1]);
         } else {
             $image = Image::make($file['tmp_name']);
         }
 
         if ($watermark) {
             $dirsep = DIRECTORY_SEPARATOR;
-            $watermarkImage = Image::make(Config::get('app.BASE_DIR')."{$dirsep}storage{$dirsep}".$watermark['file'])->fit($watermark['width'], $watermark['height']);
+            $watermarkImage = Image::make(Config::get('app.BASE_DIR')."{$dirsep}storage{$dirsep}".$watermark['file'])->resize($watermark['width'], $watermark['height']);
             $image->insert($watermarkImage, $watermark['pos'], $watermark['x'], $watermark['y']);
         }
         $imageContent = $image->encode('jpg', Config::get('image.QUALITY'));

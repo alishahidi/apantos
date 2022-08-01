@@ -23,7 +23,7 @@ class Application
         $this->loadProviders();
         $this->loadHelpers();
         $this->loadSessions();
-        $this->loadCsrf();
+        // $this->loadCsrf();
         $this->registerRoutes();
         $this->routing();
     }
@@ -57,12 +57,12 @@ class Application
         $this->initialOldSession();
     }
 
-    private function loadCsrf()
-    {
-        if (getMethod() !== 'post') {
-            Security::setCsrf();
-        }
-    }
+    // private function loadCsrf()
+    // {
+    //     if (getMethod() !== 'post') {
+    //         Security::setCsrf();
+    //     }
+    // }
 
     private function requireFile($filePath)
     {
