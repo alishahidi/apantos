@@ -38,6 +38,7 @@
   - [[#limit][limit]]
   - [[#count][count]]
   - [[#pagination][pagination]]
+  - [[#relationships][Relationships]]
 
 * What is apantos
 
@@ -299,6 +300,15 @@ id, create_at, updated_at, deleted_at exist by default in fillables
 |  2 | emacs |
 |  3 | php   |
 
+*** tags
+
+| id | name  |
+|----+-------|
+|  1 | linux |
+|  2 | emacs |
+|  3 | php   |
+|  4 | json  |
+
 *** posts
 
 | id | title         | cat_id | description                  |
@@ -307,6 +317,23 @@ id, create_at, updated_at, deleted_at exist by default in fillables
 |  2 | post 2        |      1 | description of post number 2 |
 |  3 | post number 3 |      2 | description of post number 3 |
 |  4 | post 4        |      3 | description of post number 4 |
+
+*** post_tag
+
+| id | post_id | tag_1 |
+|----+---------+-------|
+|  1 |       1 |     1 |
+|  2 |       1 |     2 |
+|  3 |       2 |     1 |
+|  4 |       2 |     3 |
+
+*** comments
+
+| id | user_id | post_id | comment   |
+|----+---------+---------+-----------|
+|  1 |       1 |       2 | comment 1 |
+|  2 |       2 |       2 | comment 2 |
+|  3 |       1 |       1 | comment 3 |
 
 ** create
 
@@ -602,5 +629,79 @@ $postsCount = Post::count(); // return 4
 
 // auto convert page_id with $_GET['_pageid']
 $posts = Post::pagination(3);
+
+#+end_src
+
+** Relationships
+
+*** hasOne
+
+**** argvs
+
+1. model class name
+2. foreign key
+3. local key
+
+**** use
+
+#+begin_src php
+
+$user = Post::hasOne(User::class, 'user_id', 'id');
+
+#+end_src
+
+
+*** hasMany
+
+**** argvs
+
+1. model class name
+2. foreign key
+3. local key
+
+**** use
+
+#+begin_src php
+
+$comments = Post::hasMany(Comment::class, 'post_id', 'id')->get();
+
+#+end_src
+
+*** belongsTo
+
+**** argvs
+
+1. model class name
+2. foreign key
+3. local key
+
+**** use
+
+#+begin_src php
+
+$user = Post::belongTo(User::class, 'user_id', 'id')->get();
+
+#+end_src
+
+*** belongsToMany
+
+**** argvs
+
+1. model class name
+2. pivot table
+3. local key
+4. pivot foreign key
+5. pivot other foreign key
+6. foreign key
+
+**** use
+
+#+begin_src php
+
+$tags = Post::belongsToMany(Tag::class, 'article_tag', 'id', 'post_id', 'tag_id', 'id')->get();
+// |      *----------------------------------------------*        |         |       |
+// |      *-------------------------------------------------------*         |       |
+// *------------------------------------------------------------------------*       |
+// *--------------------------------------------------------------------------------*
 
 #+end_src
