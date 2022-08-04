@@ -39,6 +39,21 @@
   - [[#count][count]]
   - [[#pagination][pagination]]
   - [[#relationships][Relationships]]
+- [[#view][View]]
+  - [[#apts-template-engine][apts template engine]]
+  - [[#render][render]]
+- [[#auth-system][Auth system]]
+  - [[#registeruser][registerUser]]
+  - [[#updateuser][updateUser]]
+  - [[#loginusingemail][loginUsingEmail]]
+  - [[#loginusingusername][loginUsingUsername]]
+  - [[#loginusingid][loginUsingId]]
+  - [[#logout][logout]]
+  - [[#check][check]]
+  - [[#checklogin][checkLogin]]
+  - [[#user][user]]
+  - [[#userusingemail][userUsingEmail]]
+  - [[#userusingusername][userUsingUsername]]
 
 * What is apantos
 
@@ -54,6 +69,9 @@ views in *resources/view*
 controllers in *app/Controllers*
 
 * Directory Structure
+
+#+begin_example
+
 - app
   - Http
     - Controllers
@@ -82,6 +100,7 @@ controllers in *app/Controllers*
   - images
 - system
 
+#+end_example
 
 * Directory explanation
 
@@ -703,5 +722,268 @@ $tags = Post::belongsToMany(Tag::class, 'article_tag', 'id', 'post_id', 'tag_id'
 // |      *-------------------------------------------------------*         |       |
 // *------------------------------------------------------------------------*       |
 // *--------------------------------------------------------------------------------*
+
+#+end_src
+
+* View
+
+all views create in *resources/view*
+
+** apts template engine
+
+# maby replace twig template engine in next versions
+
+#+begin_example
+
+- resources
+  - view
+    - home
+      - layouts
+        - master.apts.php
+        - head-tag.apts.php
+      - index.apts.php
+
+#+end_example
+
+*** home > layouts > master.apts.php
+
+#+begin_src html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @include('home.layouts.head-tag')
+    @yield('title')
+    @yield('head-tag')
+</head>
+
+<body>
+    @yield('content')
+</body>
+
+</html>
+
+#+end_src
+
+*** home > layouts > head-tag.apts.php
+
+#+begin_src html
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+#+end_src
+
+*** home > index.apts.php
+
+#+begin_src html
+
+@extends('app.layouts.app')
+
+@section('head-tag')
+
+<title>Apantos project</title>
+
+@endsection
+
+@section('content')
+
+<h2>Welcome to apantos project</h2>
+
+@endsection
+
+#+end_src
+
+** render
+
+replace */* with *.* in your path
+path start in *resources/view*
+
+#+begin_src php
+
+view('home.index');
+
+#+end_src
+
+or
+
+#+begin_src php
+
+$message = 'Send message to view';
+view('home.index', compact('message'));
+
+#+end_src
+
+*** example using in controller
+
+#+begin_src php
+
+namespace App\Http\Controllers\Home;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        $message = 'Send message to view';
+        return view('home.index', compact('message'));
+    }
+}
+
+#+end_src
+
+* Auth system
+
+auth using *User* mdoel by default
+
+** registerUser
+
+*** argvs
+
+1. values:array
+2. password input name
+3. encrypt input name:array
+
+*** use
+
+#+begin_src php
+
+$inputs = [
+    'username' => 'alishahidi',
+    'password' => 'decoded-secret-from-form',
+    'phone_number' => '+13924324'
+    'secret' => 'top secret'
+];
+
+Auth::storeUser($inputs, 'password', ['secret']);
+
+#+end_src
+
+** updateUser
+
+*** argvs
+
+1. values:array
+2. allowed inputs:key=>value array
+3. password input name
+4. encrypt input name:array
+
+*** use
+
+#+begin_src php
+
+$inputs = [
+    'id' => 1,
+    'username' => 'ali',
+    'password' => 'decoded-secret-from-form',
+];
+
+Auth::updateUser($inputs, ['id', 'username', 'password'], 'password');
+
+#+end_src
+
+** loginUsingEmail
+
+*** argvs
+
+1. email
+2. decoded password
+3. no user exist error message (opt)
+4. password wrong error message (opt)
+5. remember user (opt)
+6. user cookie validate time (opt)
+
+*** use
+
+#+begin_src php
+
+Auth::loginEmailUsername('test@test.org', 'secret', "Username wrong.", "Password wrong", true, 4 * 24 * 60 * 60);
+
+#+end_src
+
+** loginUsingUsername
+
+like =loginUsingEmail= but send username between email in first argument
+
+** loginUsingId
+
+*** argvs
+
+1. id
+
+*** use
+
+#+begin_src php
+
+Auth::loginUsingId(1);
+
+#+end_src
+
+** logout
+
+*** use
+
+#+begin_src php
+
+Auth::logout();
+
+#+end_src
+
+** check
+
+check user login => redirect to *auth.login* route name if not login
+
+*** use
+
+#+begin_src php
+
+Auth::check();
+
+#+end_src
+
+** checkLogin
+
+check user login => return true/false
+
+*** use
+
+#+begin_src php
+
+$isLogin = Auth::checkLogin();
+
+#+end_src
+
+** user
+
+return user if login
+
+*** use
+
+#+begin_src php
+
+$user = Auth::user();
+
+#+end_src
+
+** userUsingEmail
+
+*** use
+
+#+begin_src php
+
+$user = Auth::userUsingEmail('test@test.org');
+
+#+end_src
+
+** userUsingUsername
+
+*** use
+
+#+begin_src php
+
+$user = Auth::userUsingUsername('ali');
 
 #+end_src
