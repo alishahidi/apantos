@@ -251,7 +251,7 @@ if (! function_exists('findRouteByName')) {
 }
 
 if (! function_exists('route')) {
-    function route($name, $params = [])
+    function route($name, $params = [], $https = false)
     {
         if (! is_array($params)) {
             throw new \Exception('route params must be array.');
@@ -270,7 +270,9 @@ if (! function_exists('route')) {
             $route = str_replace($routeMatch, array_pop($params), $route);
         }
 
-        return currentDomain().'/'.trim($route, ' /');
+        $currentDomain = $https ? str_replace('http', 'https', currentDomain()) : currentDomain();
+
+        return $currentDomain.'/'.trim($route, ' /');
     }
 }
 
@@ -552,6 +554,36 @@ function paginateView($count, $perPage, $beforeCount, $afterCount, $routeUrl, $v
     $paginateView .= $currentPage != $totalPages ? str_replace('{'.$counterName.'}', $beforeStaticValue, str_replace('{'.$linkName.'}', paginateViewRouteGenerator($routeUrl, $currentPage + 1), $view)) : '';
 
     return $paginateView;
+}
+
+if (! function_exists('error_400')) {
+    function error_400()
+    {
+        http_response_code(400);
+        header($_SERVER['SERVER_PROTOCOL'].' 400 Bad Request');
+        $view400 = Config::get('app.ERRORS.400');
+        if ($view400) {
+            view($view400);
+        } else {
+            view('errors.400');
+        }
+        exit;
+    }
+}
+
+if (! function_exists('error_401')) {
+    function error_401()
+    {
+        http_response_code(401);
+        header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
+        $view401 = Config::get('app.ERRORS.401');
+        if ($view401) {
+            view($view401);
+        } else {
+            view('errors.401');
+        }
+        exit;
+    }
 }
 
 if (! function_exists('error_404')) {

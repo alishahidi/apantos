@@ -20,11 +20,9 @@ trait HasBuilder
     {
         $request = new Request();
         $file = $request->file($name);
-
         if (! $file['tmp_name']) {
             return false;
         }
-        $filesystem = new Filesystem();
         if (isset($directory)) {
             $directory = trim($directory, "\/").'/';
         }
@@ -32,7 +30,6 @@ trait HasBuilder
             $directory .= date('Y/M/d/');
         }
         $this->directory = $directory;
-        $filesystem->mkdir(Path::normalize($directory));
         $this->driver = (new ImageManager(['driver' => 'gd']))->make($file['tmp_name']);
         $this->setAllowedMethods(['watermark', 'text', 'resize', 'fit', 'save', 'saveFtp']);
 
@@ -94,6 +91,8 @@ trait HasBuilder
 
     protected function saveMethod($name = '', $quality = 42, $format = 'jpg', $unique = false, $dateFormat = false)
     {
+        $filesystem = new Filesystem();
+        $filesystem->mkdir(Path::normalize($this->directory));
         $name = explode('.', $name)[0];
         if ($dateFormat) {
             $name .= date('Y_m_d_M_i_s');
