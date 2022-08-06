@@ -270,7 +270,7 @@ if (! function_exists('route')) {
             $route = str_replace($routeMatch, array_pop($params), $route);
         }
 
-        $currentDomain = $https ? str_replace('http', 'https', currentDomain()) : currentDomain();
+        $currentDomain = $https ? str_replace(['http'], 'https', str_replace(['https'], 'http', currentDomain())) : currentDomain();
 
         return $currentDomain.'/'.trim($route, ' /');
     }
