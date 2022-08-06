@@ -18,8 +18,8 @@ trait HasGenerateToken
         return JWT::urlsafeB64Encode(hash('sha512', bin2hex(openssl_random_pseudo_bytes(32)).self::ip().Config::get('TOKEN')));
     }
 
-    public static function generateIpUserAgentToken()
+    public static function generateUserAgentToken()
     {
-        return JWT::urlsafeB64Encode(hash('sha512', bin2hex(openssl_random_pseudo_bytes(32)).self::ip().self::userAgent().Config::get('TOKEN')));
+        return JWT::urlsafeB64Encode(hash('sha512', bin2hex(openssl_random_pseudo_bytes(32)).self::userAgent().Config::get('TOKEN')));
     }
 }

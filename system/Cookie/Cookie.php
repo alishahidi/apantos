@@ -11,7 +11,7 @@ class Cookie
         if ($isSubDomain) {
             setcookie($name, Security::encrypt(Security::jwtEncode($valueArray)), time() + $time, '/', '.'.str_replace('www.', '', currentDomain()));
         } else {
-            setcookie($name, Security::encrypt(Security::jwtEncode($valueArray)), time() + $time);
+            setcookie($name, Security::encrypt(Security::jwtEncode($valueArray)), time() + $time, '/');
         }
 
         return true;

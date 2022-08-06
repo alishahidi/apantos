@@ -9,9 +9,6 @@ trait HasInputsContent
     private function checkInputsContent()
     {
         $methodArray = $this->findMethods();
-        if (getMethod() !== 'post') {
-            Security::setCsrf();
-        }
         if ($methodArray) {
             foreach ($methodArray as $method) {
                 $this->initialMethod($method);

@@ -3,7 +3,6 @@
 namespace System\Request;
 
 use System\Config\Config;
-use System\Request\Traits\HasFileManager;
 use System\Request\Traits\HasFileValidationRules;
 use System\Request\Traits\HasRunValidation;
 use System\Request\Traits\HasValidationRules;
@@ -14,7 +13,6 @@ class Request
     use HasFileValidationRules;
     use HasRunValidation;
     use HasValidationRules;
-    use HasFileManager;
 
     protected $errorExist = false;
 

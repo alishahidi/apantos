@@ -8,7 +8,7 @@ trait HasCsrf
 {
     public static function setCsrf()
     {
-        $token = self::generateIpUserAgentToken();
+        $token = self::generateUserAgentToken();
         Session::set('_csrf', ['token' => $token]);
 
         return true;

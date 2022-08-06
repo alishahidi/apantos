@@ -53,9 +53,6 @@ class Auth
     {
         $userInCookie = Cookie::get('user');
         $userInSession = Session::get('user');
-        if (! $userInSession && ! $userInCookie) {
-            return redirect(route(self::$redirectTo));
-        }
         $userId = $userInCookie ? $userInCookie->id : $userInSession->id;
         $user = User::find($userId);
         if (! empty($user)) {

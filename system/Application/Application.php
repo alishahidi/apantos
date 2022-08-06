@@ -12,7 +12,6 @@ class Application
     {
         $dotenv = Dotenv::createImmutable(Config::get('app.BASE_DIR'));
         $dotenv->load();
-        error_reporting(1);
         global $routes;
         $routes = [
             'get' => [],
@@ -23,7 +22,7 @@ class Application
         $this->loadProviders();
         $this->loadHelpers();
         $this->loadSessions();
-        // $this->loadCsrf();
+        $this->loadCsrf();
         $this->registerRoutes();
         $this->routing();
     }
@@ -57,12 +56,12 @@ class Application
         $this->initialOldSession();
     }
 
-    // private function loadCsrf()
-    // {
-    //     if (getMethod() !== 'post') {
-    //         Security::setCsrf();
-    //     }
-    // }
+    private function loadCsrf()
+    {
+        if (getMethod() !== 'post') {
+            Security::setCsrf();
+        }
+    }
 
     private function requireFile($filePath)
     {
