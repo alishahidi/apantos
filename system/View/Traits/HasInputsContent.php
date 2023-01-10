@@ -16,6 +16,7 @@ trait HasInputsContent
         }
         $tokenArray = $this->findTokens();
         if ($tokenArray) {
+            Security::setCsrf();
             foreach ($tokenArray as $token) {
                 $this->initialToken();
             }

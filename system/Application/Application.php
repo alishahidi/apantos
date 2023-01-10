@@ -22,7 +22,6 @@ class Application
         $this->loadProviders();
         $this->loadHelpers();
         $this->loadSessions();
-        $this->loadCsrf();
         $this->registerRoutes();
         $this->routing();
     }
@@ -41,8 +40,8 @@ class Application
     private function initialOldSession()
     {
         $tmp = [];
-        $tmp = ! isset($_GET) ? $tmp : array_merge($tmp, $_GET);
-        $tmp = ! isset($_POST) ? $tmp : array_merge($tmp, $_POST);
+        $tmp = !isset($_GET) ? $tmp : array_merge($tmp, $_GET);
+        $tmp = !isset($_POST) ? $tmp : array_merge($tmp, $_POST);
         $_SESSION['old'] = $tmp;
         unset($tmp);
     }
@@ -56,19 +55,12 @@ class Application
         $this->initialOldSession();
     }
 
-    private function loadCsrf()
-    {
-        if (getMethod() !== 'post') {
-            Security::setCsrf();
-        }
-    }
-
     private function requireFile($filePath)
     {
         $dirSep = DIRECTORY_SEPARATOR;
         $filePath = trim($filePath, ' .');
         $filePath = str_replace('.', $dirSep, $filePath);
-        $filePath = Config::get('app.BASE_DIR')."{$dirSep}{$filePath}.php";
+        $filePath = Config::get('app.BASE_DIR') . "{$dirSep}{$filePath}.php";
         if (file_exists($filePath)) {
             require_once $filePath;
         }

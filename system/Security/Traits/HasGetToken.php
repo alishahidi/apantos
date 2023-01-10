@@ -20,6 +20,6 @@ trait HasGetToken
 
     public static function getIpToken()
     {
-        return JWT::urlsafeB64Encode(hash('sha512', Config::get('TOKEN').self::ip()));
+        return JWT::urlsafeB64Encode(hash('sha512', Config::get('TOKEN') . self::ip()));
     }
 }
