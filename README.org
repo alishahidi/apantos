@@ -6,6 +6,8 @@
 
 * TABLE OF CONTENTS :toc:
 - [[#what-is-apantos][What is apantos]]
+- [[#how-create-first-apantos-project][How create first Apantos project]]
+  - [[#set-tokens][Set tokens]]
 - [[#what-is-framework-architecture-][What is framework architecture ?]]
 - [[#directory-structure][Directory Structure]]
 - [[#directory-explanation][Directory explanation]]
@@ -58,6 +60,33 @@
 * What is apantos
 
 Apantos is a fast and simple framework based on php with security methods and dedicated orm. Modularly
+
+* How create first Apantos project
+
+This project available on composer packagist
+you can easily install by =composer create-project=
+
+#+begin_src sh
+
+composer create-project alishahidi/apantos
+
+#+end_src
+
+for serve project on port *8000*
+
+#+begin_src sh
+
+php -S 127.0.0.1:8000 -t public
+
+#+end_src
+
+** Set tokens
+
+after create project you must set .env =CRYPT_TOKEN= & =TOKEN= variable
+by default =/api/token= url set for get valid token
+using this url 2 time and save gived token into env variables
+
+*recommended remove token api route after saving token from* =/routes/api=
 
 
 * What is framework architecture ?
