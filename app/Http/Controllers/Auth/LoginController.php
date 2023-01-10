@@ -11,9 +11,9 @@ class LoginController extends Controller
     public function login()
     {
         $request = new LoginRequest();
-        Auth::loginUsingEmail($request->email, $request->password, 'user not fount.', 'Password incorrect');
+        Auth::loginUsingEmail($request->email, $request->password, 'user not found.', 'Password incorrect');
         $user = Auth::userUsingEmail($request->email);
-        if ($user->permission == 'root') {
+        if ($user->permission === 'root') {
             return redirect(route('admin.index'));
         }
 
