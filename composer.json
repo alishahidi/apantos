@@ -3,7 +3,7 @@
     "type": "project",
     "description": "The Apantos Framework.",
     "keywords": ["framework", "apantos"],
-    "license": "GPL-3.0-or-later",
+    "license": "MIT",
     "authors": [
         {
         "name": "Ali Shahidi",
