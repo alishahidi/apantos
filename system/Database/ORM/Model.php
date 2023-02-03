@@ -2,13 +2,14 @@
 
 namespace System\Database\ORM;
 
+use stdClass;
 use System\Database\Traits\HasAttributes;
 use System\Database\Traits\HasCRUD;
 use System\Database\Traits\HasMethodCaller;
 use System\Database\Traits\HasQueryBuilder;
 use System\Database\Traits\HasRelation;
 
-abstract class Model
+abstract class Model extends stdClass
 {
     use HasCRUD;
     use HasAttributes;

@@ -2,9 +2,10 @@
 
 namespace System\Config;
 
+use stdClass;
 use Symfony\Component\Finder\Finder;
 
-class Config
+class Config extends stdClass
 {
     private static $instance;
 

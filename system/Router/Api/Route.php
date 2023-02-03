@@ -2,7 +2,9 @@
 
 namespace System\Router\Api;
 
-class Route
+use stdClass;
+
+class Route extends stdClass
 {
     public static function get($url, $executeMethod, $name = null)
     {

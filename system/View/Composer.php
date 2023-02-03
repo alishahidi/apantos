@@ -2,7 +2,9 @@
 
 namespace System\View;
 
-class Composer
+use stdClass;
+
+class Composer extends stdClass
 {
     private static $instance;
 

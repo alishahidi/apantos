@@ -263,7 +263,7 @@ if (! function_exists('route')) {
         $params = array_reverse($params);
         $routeParamsMatch = [];
         preg_match_all('/{[^}.]*}/', $route, $routeParamsMatch);
-        if ($params[0] && count($routeParamsMatch[0]) > count($params)) {
+        if (! empty($params) && $params[0] && count($routeParamsMatch[0]) > count($params)) {
             throw new \Exception('route params not enough.');
         }
         foreach ($routeParamsMatch[0] as $key => $routeMatch) {
@@ -503,6 +503,7 @@ if (! function_exists('objectToArray')) {
             foreach ($object as $obj) {
                 if (! is_array($name)) {
                     array_push($returnArray, $obj->{$name});
+
                     continue;
                 }
                 $tmpArr = [];

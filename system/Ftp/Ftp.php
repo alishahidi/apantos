@@ -2,9 +2,10 @@
 
 namespace System\Ftp;
 
+use stdClass;
 use System\Ftp\Traits\HasClient;
 
-class Ftp
+class Ftp extends stdClass
 {
     use HasClient;
 

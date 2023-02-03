@@ -21,7 +21,7 @@ trait HasClient
             $filesystem->write($path, $content);
 
             return '/'.trim(str_replace(DIRECTORY_SEPARATOR, '/', $path), "\/");
-        } catch (FilesystemException | UnableToWriteFile $exception) {
+        } catch (FilesystemException|UnableToWriteFile $exception) {
             return false;
         }
     }
@@ -33,7 +33,7 @@ trait HasClient
             $content = $filesystem->read($path);
 
             return $content;
-        } catch (FilesystemException | UnableToReadFile $exception) {
+        } catch (FilesystemException|UnableToReadFile $exception) {
             return false;
         }
     }
@@ -45,7 +45,7 @@ trait HasClient
             $filesystem->writedeleteDirectory($path);
 
             return true;
-        } catch (FilesystemException | UnableToDeleteDirectory $exception) {
+        } catch (FilesystemException|UnableToDeleteDirectory $exception) {
             return false;
         }
     }
@@ -57,7 +57,7 @@ trait HasClient
             $filesystem->createDirectory($path);
 
             return true;
-        } catch (FilesystemException | UnableToCreateDirectory $exception) {
+        } catch (FilesystemException|UnableToCreateDirectory $exception) {
             return false;
         }
     }
@@ -69,7 +69,7 @@ trait HasClient
             $filesystem->delete($path);
 
             return true;
-        } catch (FilesystemException | UnableToDeleteFile $exception) {
+        } catch (FilesystemException|UnableToDeleteFile $exception) {
             return false;
         }
     }
@@ -81,7 +81,7 @@ trait HasClient
             $filesystem->move($from, $to);
 
             return true;
-        } catch (FilesystemException | UnableToMoveFile $exception) {
+        } catch (FilesystemException|UnableToMoveFile $exception) {
             return false;
         }
     }
@@ -93,7 +93,7 @@ trait HasClient
             $filesystem->copy($from, $to);
 
             return true;
-        } catch (FilesystemException | UnableToCopyFile $exception) {
+        } catch (FilesystemException|UnableToCopyFile $exception) {
             return false;
         }
     }

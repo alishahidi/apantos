@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dot - PHP dot notation access to arrays
  *
@@ -16,8 +17,9 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use JsonSerializable;
+use stdClass;
 
-class Dot implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
+class Dot extends stdClass implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
 {
     /**
      * The stored items

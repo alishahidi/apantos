@@ -2,9 +2,10 @@
 
 namespace System\Session;
 
+use stdClass;
 use System\Security\Security;
 
-class Session
+class Session extends stdClass
 {
     public static function set($name, $valueArray)
     {

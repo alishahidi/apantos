@@ -2,9 +2,10 @@
 
 namespace System\Image;
 
+use stdClass;
 use System\Image\Traits\HasBuilder;
 
-class Image
+class Image extends stdClass
 {
     use HasBuilder;
 

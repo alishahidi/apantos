@@ -2,12 +2,13 @@
 
 namespace System\View;
 
+use stdClass;
 use System\View\Traits\HasExtendsContent;
 use System\View\Traits\HasIncludeContent;
 use System\View\Traits\HasInputsContent;
 use System\View\Traits\HasViewLoader;
 
-class ViewBuilder
+class ViewBuilder extends stdClass
 {
     use HasViewLoader;
     use HasExtendsContent;

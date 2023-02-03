@@ -2,9 +2,10 @@
 
 namespace System\Cookie;
 
+use stdClass;
 use System\Security\Security;
 
-class Cookie
+class Cookie extends stdClass
 {
     public static function set($name, $valueArray, $time, $isSubDomain = false)
     {

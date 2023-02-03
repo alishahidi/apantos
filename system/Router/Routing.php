@@ -3,9 +3,10 @@
 namespace System\Router;
 
 use ReflectionMethod;
+use stdClass;
 use System\Config\Config;
 
-class Routing
+class Routing extends stdClass
 {
     private $current_route;
 

@@ -2,13 +2,14 @@
 
 namespace System\Request;
 
+use stdClass;
 use System\Config\Config;
 use System\Request\Traits\HasFileValidationRules;
 use System\Request\Traits\HasRunValidation;
 use System\Request\Traits\HasValidationRules;
 use System\Security\Security;
 
-class Request
+class Request extends stdClass
 {
     use HasFileValidationRules;
     use HasRunValidation;

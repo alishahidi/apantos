@@ -2,6 +2,7 @@
 
 namespace System\Security;
 
+use stdClass;
 use System\Security\Traits\HasCaptcha;
 use System\Security\Traits\HasCrypt;
 use System\Security\Traits\HasCsrf;
@@ -12,7 +13,7 @@ use System\Security\Traits\HasJwt;
 use System\Security\Traits\HasPassword;
 use System\Security\Traits\HasVerifyToken;
 
-class Security
+class Security extends stdClass
 {
     use HasGenerateToken;
     use HasGetToken;

@@ -2,9 +2,10 @@
 
 namespace System\Notify;
 
+use stdClass;
 use System\Notify\Traits\HasMail;
 
-class Notify
+class Notify extends stdClass
 {
     use HasMail;
 

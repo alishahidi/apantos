@@ -3,11 +3,12 @@
 namespace System\Auth;
 
 use App\Models\User;
+use stdClass;
 use System\Cookie\Cookie;
 use System\Security\Security;
 use System\Session\Session;
 
-class Auth
+class Auth extends stdClass
 {
     private static $redirectTo = 'auth.login';
 
