@@ -2,15 +2,12 @@
 
 if [ ! $1 ]
 then
-    echo "Usage: testCreator [PATH]"
+    echo "Usage: ./testCreator [PATH]"
+    echo "For example: ./testCreator Config/Myconf/Config.php"
     exit
 fi
 
 PATHFILE=$1
-# PATHFILEWITHOUTTYPE=$PATHFILE | sed "s/.php//g"
-
-# echo $PATHFILEWITHOUTTYPE
-
 
 create_dir_if_do_not_exist (){
     if [ ! -d $1 ]
@@ -23,8 +20,9 @@ create_dir_if_do_not_exist (){
 LIST=($(echo "$PATHFILE" | sed "s/\// /g"))
 PATH_C=""
 OPERATE=$(( ${#LIST[*]} -1 ))
-CLASS=${LIST[${#LIST[@]} - 1]} 
-# echo $1 | sed -e "s/$CLASS//g"
+CLASS=$( echo ${LIST[-1]} | sed "s/.php//g" )
+FILENAME=($( echo $1 | sed "s/\// /g" ))
+NAMESPACE=($( echo $1 | sed "s/\// /g" | sed "s/${FILENAME[-1]}//g" | sed "s/ /\\\/g" | sed s/.$//) )
 
 for (( I=0; I<  $OPERATE; I++ ))
 do
@@ -40,19 +38,20 @@ done
 
 if [ ! -f $1 ]
 then
-    touch "$1.php"
+    touch "$1"
 fi
 
-echo "
-<?php 
+echo "<?php 
+
+namespace $NAMESPACE;
+
 use PHPUnit\Framework\TestCase;
 
 class $CLASS extends TestCase
 {
 
 }
-" > $1.php
-
+" > $1
 
 
 
