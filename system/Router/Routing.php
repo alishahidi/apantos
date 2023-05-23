@@ -104,14 +104,12 @@ class Routing extends stdClass
     {
         $method_field = strtolower($_SERVER['REQUEST_METHOD']);
 
-        if ($method_field == 'post') {
-            if (isset($_POST['_method'])) {
-                if ($_POST['_method'] == 'put') {
-                    $method_field = 'put';
-                } elseif ($_POST['_method'] == 'delete') {
-                    $method_field = 'delete';
-                }
-            }
+        if ($method_field == 'post' && isset($_POST['_method'])) {
+            $methods = ['put', 'delete'];
+
+            $method_field = (in_array($_POST['_method'], $methods))
+            ? $_POST['_method']
+            : $method_field;
         }
 
         return $method_field;
