@@ -18,6 +18,8 @@ class Routing extends stdClass
 
     private $compare = false;
 
+    private $match;
+
     public function __construct()
     {
         $this->current_route = explode('/', trim(Config::get('app.CURRENT_ROUTE'), '/'));
@@ -26,32 +28,45 @@ class Routing extends stdClass
         $this->routes = $routes;
     }
 
+    private function checkEmptyMatch()
+    {
+        if (empty($this->match)) $this->error404();
+    }
+
+    private function checkExistsClass()
+    {
+        $classPath = str_replace('\\', '/', $this->match['class']);
+        $path = Config::get('app.BASE_DIR').'/app/Http/Controllers/'.$classPath.'.php';
+
+        if (! file_exists($path)) $this->error404();
+    }
+
+    private function runController()
+    {
+        $class = "\App\Http\Controllers\\".$this->match['class'];
+        $object = new $class();
+
+        if (! method_exists($object, $this->match['method']))
+            $this->error404();
+
+        $reflection = new ReflectionMethod($class, $this->match['method']);
+        $parameterCount = $reflection->getNumberOfParameters();
+
+        if (! $parameterCount <= count($this->values))
+            $this->error404();
+
+        call_user_func_array([$object, $this->match['method']], $this->values);
+    }
+
     public function run()
     {
-        $match = $this->matchMethod();
-        if (empty($match)) {
-            $this->error404();
-        }
+        $this->match = $this->matchMethod();
 
-        $classPath = str_replace('\\', '/', $match['class']);
-        $path = Config::get('app.BASE_DIR').'/app/Http/Controllers/'.$classPath.'.php';
-        if (! file_exists($path)) {
-            $this->error404();
-        }
+        $this->checkEmptyMatch();
 
-        $class = "\App\Http\Controllers\\".$match['class'];
-        $object = new $class();
-        if (method_exists($object, $match['method'])) {
-            $reflection = new ReflectionMethod($class, $match['method']);
-            $parameterCount = $reflection->getNumberOfParameters();
-            if ($parameterCount <= count($this->values)) {
-                call_user_func_array([$object, $match['method']], $this->values);
-            } else {
-                $this->error404();
-            }
-        } else {
-            $this->error404();
-        }
+        $this->checkExistsClass();
+
+        $this->runController();
     }
 
     private function matchMethod()
