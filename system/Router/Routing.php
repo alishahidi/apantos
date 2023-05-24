@@ -22,10 +22,49 @@ class Routing extends stdClass
 
     public function __construct()
     {
+        global $routes;
+
         $this->current_route = explode('/', trim(Config::get('app.CURRENT_ROUTE'), '/'));
         $this->method_field = $this->methodField();
-        global $routes;
         $this->routes = $routes;
+    }
+
+    public function methodField()
+    {
+        $method_field = strtolower($_SERVER['REQUEST_METHOD']);
+
+        if ($method_field == 'post' && isset($_POST['_method'])) {
+            $methods = ['put', 'delete'];
+
+            $method_field = (in_array($_POST['_method'], $methods))
+            ? $_POST['_method']
+            : $method_field;
+        }
+
+        return $method_field;
+    }
+
+    private function find($reserve)
+    {
+        if ($this->compare($reserve['url']))
+            return [
+                'class' => $reserve['class'],
+                'method' => $reserve['method']
+            ];
+    }
+
+    private function matchMethod()
+    {
+        $reservedRoutes = $this->routes[$this->method_field];
+
+        foreach($reservedRoutes as $reservedRoute)
+        {
+            if($find = $this->find($reservedRoute)) return $find;
+
+            $this->values = [];
+        }
+
+        return [];
     }
 
     private function checkEmptyMatch()
@@ -67,29 +106,6 @@ class Routing extends stdClass
         $this->checkExistsClass();
 
         $this->runController();
-    }
-
-    private function matchMethod()
-    {
-        $reservedRoutes = $this->routes[$this->method_field];
-
-        foreach($reservedRoutes as $reservedRoute)
-        {
-            if($find = $this->find($reservedRoute)) return $find;
-
-            $this->values = [];
-        }
-
-        return [];
-    }
-
-    public function find($reserve)
-    {
-        if ($this->compare($reserve['url']))
-            return [
-                'class' => $reserve['class'],
-                'method' => $reserve['method']
-            ];
     }
 
     private function compareRootPath($reservedRouteUrl)
@@ -141,20 +157,5 @@ class Routing extends stdClass
             view('errors.404');
         }
         exit;
-    }
-
-    public function methodField()
-    {
-        $method_field = strtolower($_SERVER['REQUEST_METHOD']);
-
-        if ($method_field == 'post' && isset($_POST['_method'])) {
-            $methods = ['put', 'delete'];
-
-            $method_field = (in_array($_POST['_method'], $methods))
-            ? $_POST['_method']
-            : $method_field;
-        }
-
-        return $method_field;
     }
 }
