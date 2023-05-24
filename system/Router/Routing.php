@@ -55,15 +55,24 @@ class Routing extends stdClass
     private function matchMethod()
     {
         $reservedRoutes = $this->routes[$this->method_field];
-        foreach ($reservedRoutes as $reservedRoute) {
-            if ($this->compare($reservedRoute['url']) === true) {
-                return ['class' => $reservedRoute['class'], 'method' => $reservedRoute['method']];
-            } else {
-                $this->values = [];
-            }
+
+        foreach($reservedRoutes as $reservedRoute)
+        {
+            if($find = $this->find($reservedRoute)) return $find;
+
+            $this->values = [];
         }
 
         return [];
+    }
+
+    public function find($reserve)
+    {
+        if ($this->compare($reserve['url']))
+            return [
+                'class' => $reserve['class'],
+                'method' => $reserve['method']
+            ];
     }
 
     private function compare($reservedRouteUrl)
@@ -71,10 +80,12 @@ class Routing extends stdClass
         if (trim($reservedRouteUrl, '/') === '') {
             return trim($this->current_route[0], '/') === '' ? true : false;
         }
+
         $reservedRouteUrlArray = explode('/', $reservedRouteUrl);
         if (count($this->current_route) !== count($reservedRouteUrlArray)) {
             return false;
         }
+        
         foreach ($this->current_route as $key => $currentRouteElement) {
             $reservedRouteUrlElement = $reservedRouteUrlArray[$key];
             if (substr($reservedRouteUrlElement, 0, 1) === '{' && substr($reservedRouteUrlElement, -1) === '}') {
@@ -104,14 +115,12 @@ class Routing extends stdClass
     {
         $method_field = strtolower($_SERVER['REQUEST_METHOD']);
 
-        if ($method_field == 'post') {
-            if (isset($_POST['_method'])) {
-                if ($_POST['_method'] == 'put') {
-                    $method_field = 'put';
-                } elseif ($_POST['_method'] == 'delete') {
-                    $method_field = 'delete';
-                }
-            }
+        if ($method_field == 'post' && isset($_POST['_method'])) {
+            $methods = ['put', 'delete'];
+
+            $method_field = (in_array($_POST['_method'], $methods))
+            ? $_POST['_method']
+            : $method_field;
         }
 
         return $method_field;
