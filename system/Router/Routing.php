@@ -16,6 +16,8 @@ class Routing extends stdClass
 
     private $values = [];
 
+    private $compare = false;
+
     public function __construct()
     {
         $this->current_route = explode('/', trim(Config::get('app.CURRENT_ROUTE'), '/'));
@@ -75,27 +77,42 @@ class Routing extends stdClass
             ];
     }
 
-    private function compare($reservedRouteUrl)
+    private function compareRootPath($reservedRouteUrl)
     {
-        if (trim($reservedRouteUrl, '/') === '') {
-            return trim($this->current_route[0], '/') === '' ? true : false;
-        }
+        if (! (trim($reservedRouteUrl, '/') === ''))
+            return null;
 
+        if(trim($this->current_route[0], '/') === '')
+            $this->compare = true;
+    }
+
+    private function placementUrlParameters($reservedRouteUrl)
+    {
         $reservedRouteUrlArray = explode('/', $reservedRouteUrl);
-        if (count($this->current_route) !== count($reservedRouteUrlArray)) {
-            return false;
-        }
-        
+
+        if (count($this->current_route) !== count($reservedRouteUrlArray)) return;
+
         foreach ($this->current_route as $key => $currentRouteElement) {
             $reservedRouteUrlElement = $reservedRouteUrlArray[$key];
-            if (substr($reservedRouteUrlElement, 0, 1) === '{' && substr($reservedRouteUrlElement, -1) === '}') {
+            if (
+                substr($reservedRouteUrlElement, 0, 1) === '{'
+                && substr($reservedRouteUrlElement, -1) === '}'
+            )
                 array_push($this->values, $currentRouteElement);
-            } elseif ($reservedRouteUrlElement !== $currentRouteElement) {
-                return false;
-            }
+            elseif ($reservedRouteUrlElement !== $currentRouteElement)
+                return;
         }
 
-        return true;
+        $this->compare = true;
+    }
+
+    private function compare($reservedRouteUrl)
+    {
+        $this->compareRootPath($reservedRouteUrl);
+
+        $this->placementUrlParameters($reservedRouteUrl);
+
+        return $this->compare;
     }
 
     public function error404()
