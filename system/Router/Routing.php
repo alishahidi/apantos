@@ -151,11 +151,10 @@ class Routing extends stdClass
         http_response_code(404);
         header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
         $view404 = Config::get('app.ERRORS.404');
-        if ($view404) {
-            view($view404);
-        } else {
-            view('errors.404');
-        }
+
+        if (! $view404) view('errors.404');
+        view($view404);
+
         exit;
     }
 }
