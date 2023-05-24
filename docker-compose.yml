@@ -1,0 +1,14 @@
+services:
+  apantos:
+    image: "apantos:latest"
+    container_name: "apantos"
+    stdin_open: true
+    tty: true
+    ports: 
+      - "80:80"
+    networks:
+      - apantos
+    volumes:
+      - ".:/var/www/"
+networks:
+  apantos:
