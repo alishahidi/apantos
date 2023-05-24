@@ -5,6 +5,7 @@ namespace System\Router;
 use ReflectionMethod;
 use stdClass;
 use System\Config\Config;
+use System\Router\Compare;
 
 class Routing extends stdClass
 {
@@ -46,11 +47,15 @@ class Routing extends stdClass
 
     private function find($reserve)
     {
-        if ($this->compare($reserve['url']))
+        $compare = (new Compare($reserve['url'], $this->current_route));
+
+        if ($compare->compare())
             return [
                 'class' => $reserve['class'],
                 'method' => $reserve['method']
             ];
+
+        $this->values = $compare->values();
     }
 
     private function matchMethod()
@@ -106,44 +111,6 @@ class Routing extends stdClass
         $this->checkExistsClass();
 
         $this->runController();
-    }
-
-    private function compareRootPath($reservedRouteUrl)
-    {
-        if (! (trim($reservedRouteUrl, '/') === ''))
-            return null;
-
-        if(trim($this->current_route[0], '/') === '')
-            $this->compare = true;
-    }
-
-    private function placementUrlParameters($reservedRouteUrl)
-    {
-        $reservedRouteUrlArray = explode('/', $reservedRouteUrl);
-
-        if (count($this->current_route) !== count($reservedRouteUrlArray)) return;
-
-        foreach ($this->current_route as $key => $currentRouteElement) {
-            $reservedRouteUrlElement = $reservedRouteUrlArray[$key];
-            if (
-                substr($reservedRouteUrlElement, 0, 1) === '{'
-                && substr($reservedRouteUrlElement, -1) === '}'
-            )
-                array_push($this->values, $currentRouteElement);
-            elseif ($reservedRouteUrlElement !== $currentRouteElement)
-                return;
-        }
-
-        $this->compare = true;
-    }
-
-    private function compare($reservedRouteUrl)
-    {
-        $this->compareRootPath($reservedRouteUrl);
-
-        $this->placementUrlParameters($reservedRouteUrl);
-
-        return $this->compare;
     }
 
     public function error404()
