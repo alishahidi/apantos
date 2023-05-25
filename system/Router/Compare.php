@@ -25,27 +25,36 @@ class Compare
         $this->checkEqualUrl();
     }
 
+    private function checkTrimRootPath($value)
+    {
+        return (trim($value, '/') === '');
+    }
+
     private function compareRootPath()
     {
-        if (! (trim($this->reserved, '/') === ''))
-            return null;
-
-        if(trim($this->currentRoute[0], '/') === '')
+        if($this->checkTrimRootPath($this->currentRoute[0]) &&
+            $this->checkTrimRootPath($this->reserved))
             $this->result = true;
     }
 
     private function checkCount()
     {
-        $reservedRouteUrlArray = explode('/', $this->reserved);
+        $reservedRouteUrlArray = $this->explodeSlash();
+
         if (count($this->currentRoute) !== count($reservedRouteUrlArray))
             return false;
 
         return true;
     }
 
+    private function explodeSlash()
+    {
+        return explode('/', $this->reserved);
+    }
+
     private function checkEqualUrl()
     {
-        $reservedRouteUrlArray = explode('/', $this->reserved);
+        $reservedRouteUrlArray = $this->explodeSlash();
 
         if(! array_diff($this->currentRoute, $reservedRouteUrlArray))
             $this->result = true;
