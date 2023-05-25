@@ -15,36 +15,30 @@ class Compare
         $this->currentRoute = $currentRoute;
     }
 
-    private function compare()
+    public function get()
     {
-        $this->compareRootPath();
+        $this->handle();
 
-        if(! $this->checkCount())
-            return;
+        return $this->result;
+    }
+
+    private function handle()
+    {
+        $this->rootPath();
 
         $this->checkEqualUrl();
     }
 
-    private function checkTrimRootPath($value)
+    private function trimRootPath($value)
     {
         return (trim($value, '/') === '');
     }
 
-    private function compareRootPath()
+    private function rootPath()
     {
-        if($this->checkTrimRootPath($this->currentRoute[0]) &&
-            $this->checkTrimRootPath($this->reserved))
+        if($this->trimRootPath($this->currentRoute[0]) &&
+            $this->trimRootPath($this->reserved))
             $this->result = true;
-    }
-
-    private function checkCount()
-    {
-        $reservedRouteUrlArray = $this->explodeSlash();
-
-        if (count($this->currentRoute) !== count($reservedRouteUrlArray))
-            return false;
-
-        return true;
     }
 
     private function explodeSlash()
@@ -56,14 +50,10 @@ class Compare
     {
         $reservedRouteUrlArray = $this->explodeSlash();
 
-        if(! array_diff($this->currentRoute, $reservedRouteUrlArray))
-            $this->result = true;
-    }
+        if (count($this->currentRoute) !== count($reservedRouteUrlArray)) return;
 
-    public function get()
-    {
-        $this->compare();
+        if(array_diff( $this->currentRoute, $reservedRouteUrlArray )) return;
 
-        return $this->result;
+        $this->result = true;
     }
 }
