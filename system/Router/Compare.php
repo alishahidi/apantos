@@ -26,7 +26,7 @@ class Compare
     {
         $this->rootPath();
 
-        $this->checkEqualUrl();
+        $this->subPath();
     }
 
     private function trimRootPath($value)
@@ -46,14 +46,31 @@ class Compare
         return explode('/', $this->reserved);
     }
 
-    private function checkEqualUrl()
+    private function subPath()
     {
         $reservedRouteUrlArray = $this->explodeSlash();
 
         if (count($this->currentRoute) !== count($reservedRouteUrlArray)) return;
 
-        if(array_diff( $this->currentRoute, $reservedRouteUrlArray )) return;
+        $this->checkSubPath($reservedRouteUrlArray);
+    }
+
+    private function checkSubPath($reservedRouteUrlArray)
+    {
+        foreach($this->currentRoute as $key => $item)
+        {
+            $reserve = $reservedRouteUrlArray[$key];
+            if($this->existArguments($reserve)) continue;
+            if($item != $reserve) return;
+        };
 
         $this->result = true;
+    }
+
+    private function existArguments($reserve)
+    {
+        if(substr($reserve, 0, 1) === '{' &&
+            substr($reserve, -1) === '}')
+            return true;
     }
 }
