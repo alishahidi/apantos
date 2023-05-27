@@ -50,9 +50,8 @@ class Compare
     {
         $reservedRouteUrlArray = $this->explodeSlash();
 
-        if (count($this->currentRoute) !== count($reservedRouteUrlArray)) return;
-
-        $this->checkSubPath($reservedRouteUrlArray);
+        if (count($this->currentRoute) === count($reservedRouteUrlArray))
+            $this->checkSubPath($reservedRouteUrlArray);
     }
 
     private function checkSubPath($reservedRouteUrlArray)
