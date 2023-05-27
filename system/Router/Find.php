@@ -11,6 +11,8 @@ class Find
 
     private $parameters = [];
 
+    private $result = [];
+
     public function __construct($reserves, $currentRoute)
     {
         $this->reserves = $reserves;
@@ -19,19 +21,27 @@ class Find
 
     public function handle()
     {
-        $result = [];
-
         foreach($this->reserves as $reserve)
         {
-            $reserveUrl = $reserve['url'];
-
-            if($this->checkCompare($reserveUrl)){
-                $this->resolveParameters($reserveUrl);
-                $result = array_merge($reserve, ['parameters' => $this->parameters]);
-            };
+            $this->resolve($reserve);
         }
 
-        return  $result;
+        return $this->result;
+    }
+
+    private function resolve($reserve)
+    {
+        $reserveUrl = $reserve['url'];
+
+        if(! $this->checkCompare($reserveUrl)) return null;
+
+        $this->resolveParameters($reserveUrl);
+        $this->merge($reserve);
+    }
+
+    private function merge($reserve)
+    {
+        $this->result =  array_merge($reserve, ['parameters' => $this->parameters]);
     }
 
     private function checkCompare($reserveUrl)
@@ -42,19 +52,27 @@ class Find
 
     private function resolveParameters($reserve)
     {
-        if(! ((strpos($reserve, '{')) || strpos($reserve, '}')) ) return;
-
-        $reserveExplode = explode('/', $reserve);
+        if(! $this->existParam($reserve) ) return;
 
         foreach($this->currentRoute as $key => $item)
         {
-            $reserveKey = $reserveExplode[$key];
-
-            if(!(substr($reserveKey, 0, 1) === '{'
-                && substr($reserveKey, -1) === '}'))
-                continue;
-
-            array_push($this->parameters, $item);
+            $this->addParam((explode('/', $reserve))[$key], $item);
         }
+    }
+
+    private function existParam($reserve)
+    {
+        return ((strpos($reserve, '{')) || strpos($reserve, '}'));
+    }
+
+    private function addParam($reserve, $item)
+    {
+        if($this->checkLocationParam($reserve))
+            array_push($this->parameters, $item);
+    }
+
+    private function checkLocationParam($reserve)
+    {
+        return (substr($reserve, 0, 1) === '{' && substr($reserve, -1) === '}');
     }
 }
