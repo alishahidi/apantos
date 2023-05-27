@@ -15,10 +15,6 @@ class Routing extends stdClass
 
     private $routes;
 
-    private $values = [];
-
-    private $compare = false;
-
     private $match;
 
     public function __construct()
@@ -45,31 +41,11 @@ class Routing extends stdClass
         return $method_field;
     }
 
-    private function find($reserve)
-    {
-        $compare = (new Compare($reserve['url'], $this->current_route));
-
-        if ($compare->compare())
-            return [
-                'class' => $reserve['class'],
-                'method' => $reserve['method']
-            ];
-
-        $this->values = $compare->values();
-    }
-
     private function matchMethod()
     {
         $reservedRoutes = $this->routes[$this->method_field];
 
-        foreach($reservedRoutes as $reservedRoute)
-        {
-            if($find = $this->find($reservedRoute)) return $find;
-
-            $this->values = [];
-        }
-
-        return [];
+        return (new Find($reservedRoutes, $this->current_route))->handle();
     }
 
     private function checkEmptyMatch()
@@ -96,10 +72,10 @@ class Routing extends stdClass
         $reflection = new ReflectionMethod($class, $this->match['method']);
         $parameterCount = $reflection->getNumberOfParameters();
 
-        if (! $parameterCount <= count($this->values))
+        if (! ($parameterCount <= count($this->match['parameters'])))
             $this->error404();
 
-        call_user_func_array([$object, $this->match['method']], $this->values);
+        call_user_func_array([$object, $this->match['method']], $this->match['parameters']);
     }
 
     public function run()
