@@ -22,9 +22,7 @@ class Find
     public function handle()
     {
         foreach($this->reserves as $reserve)
-        {
             $this->resolve($reserve);
-        }
 
         return $this->result;
     }
@@ -41,7 +39,7 @@ class Find
 
     private function merge($reserve)
     {
-        $this->result =  array_merge($reserve, ['parameters' => $this->parameters]);
+        $this->result = array_merge($reserve, ['parameters' => $this->parameters]);
     }
 
     private function checkCompare($reserveUrl)
