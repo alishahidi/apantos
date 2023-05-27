@@ -9,58 +9,67 @@ class Compare
 
     private $result = false;
 
-    //TODO: Not related to compare
-    private $values = [];
-
     public function __construct($reserved, $currentRoute)
     {
         $this->reserved = $reserved;
         $this->currentRoute = $currentRoute;
     }
 
-    public function compare()
+    public function get()
     {
-        $this->compareRootPath();
-
-        $this->placementUrlParameters();
+        $this->handle();
 
         return $this->result;
     }
 
-    private function compareRootPath()
+    private function handle()
     {
-        if (! (trim($this->reserved, '/') === ''))
-            return null;
+        $this->rootPath();
 
-        if(trim($this->currentRoute[0], '/') === '')
+        $this->subPath();
+    }
+
+    private function trimRootPath($value)
+    {
+        return (trim($value, '/') === '');
+    }
+
+    private function rootPath()
+    {
+        if($this->trimRootPath($this->currentRoute[0]) &&
+            $this->trimRootPath($this->reserved))
             $this->result = true;
     }
 
-    private function placementUrlParameters()
+    private function explodeSlash()
     {
-        $reservedRouteUrlArray = explode('/', $this->reserved);
+        return explode('/', $this->reserved);
+    }
 
-        if (count($this->currentRoute) !== count($reservedRouteUrlArray)) return;
+    private function subPath()
+    {
+        $reservedRouteUrlArray = $this->explodeSlash();
 
-        //TODO this is dirty code and not related to compare class
-        foreach ($this->currentRoute as $key => $currentRouteElement) {
-            $reservedRouteUrlElement = $reservedRouteUrlArray[$key];
-            if (
-                substr($reservedRouteUrlElement, 0, 1) === '{'
-                && substr($reservedRouteUrlElement, -1) === '}'
-            )
-                array_push($this->values, $currentRouteElement);
-            elseif ($reservedRouteUrlElement !== $currentRouteElement)
-                return;
-        }
-        //TODO
+        if (count($this->currentRoute) === count($reservedRouteUrlArray))
+            $this->checkSubPath($reservedRouteUrlArray);
+    }
+
+    private function checkSubPath($reservedRouteUrlArray)
+    {
+        foreach($this->currentRoute as $key => $item)
+        {
+            $reserve = $reservedRouteUrlArray[$key];
+            if($this->existArguments($reserve)) continue;
+            if($item != $reserve) return;
+        };
 
         $this->result = true;
     }
 
-    //TODO: not related to compare
-    public function values()
+    private function existArguments($reserve)
     {
-        return $this->values;
+        if(substr($reserve, 0, 1) === '{' &&
+            substr($reserve, -1) === '}')
+            return true;
     }
 }
