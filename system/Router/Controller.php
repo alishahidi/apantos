@@ -6,7 +6,7 @@ use ReflectionMethod;
 
 class Controller
 {
-    private $pathControllers = '\App\Http\Controllers';
+    private $nameSpaceControllers = '\App\Http\Controllers';
 
     private $match = [];
 
@@ -17,43 +17,72 @@ class Controller
 
     public function handle()
     {
-        $this->emptyMatch();
-
-        $this->existsClass();
-
-        $this->run();
+        if(! $this->run() === false) $this->error404();;
     }
 
+    //TODO The checkEmpty method is messy
+    private function checkEmpty()
+    {
+        return ((empty($this->match)));
+    }
+
+    private function existFile()
+    {
+        return (file_exists($this->pathClass()));
+    }
+
+    private function replace()
+    {
+        return str_replace('\\', '/', $this->match['class']);
+    }
+
+    private function pathClass()
+    {
+        return Config::get('app.BASE_DIR').'/app/Http/Controllers/'.$this->replace().'.php';
+    }
+
+    private function setObject()
+    {
+        $class = $this->nameSpaceControllers.'\\'.$this->match['class'];
+
+        return new $class();
+    }
+
+    private function existMethod($object)
+    {
+        return (method_exists($object, $this->match['method']));
+    }
+
+    private function resolveReflaction($object)
+    {
+        $reflection = new ReflectionMethod($object, $this->match['method']);
+
+        return  $reflection->getNumberOfParameters();
+    }
+
+    private function checkCountParameters($count)
+    {
+        return ($count <= count($this->match['parameters']));
+    }
+
+    private function contains()
+    {
+        if($this->checkEmpty()
+        || ! $this->existFile()
+        || ! $this->existMethod($object = $this->setObject())
+        || ! $this->checkCountParameters($this->resolveReflaction($object)))
+            return false;
+    }
+
+    //TODO: dirty code
     public function run()
     {
-        $class = $this->pathControllers.'\\'.$this->match['class'];
-        $object = new $class();
+        if($this->contains()) return false;
 
-        if (! method_exists($object, $this->match['method']))
-            $this->error404();
-
-        $reflection = new ReflectionMethod($class, $this->match['method']);
-        $parameterCount = $reflection->getNumberOfParameters();
-
-        if (! ($parameterCount <= count($this->match['parameters'])))
-            $this->error404();
-
-        call_user_func_array([$object, $this->match['method']], $this->match['parameters']);
+        call_user_func_array([$this->setObject(), $this->match['method']], $this->match['parameters']);
     }
 
-    private function emptyMatch()
-    {
-        if (empty($this->match)) $this->error404();
-    }
-
-    private function existsClass()
-    {
-        $classPath = str_replace('\\', '/', $this->match['class']);
-        $path = Config::get('app.BASE_DIR').'/app/Http/Controllers/'.$classPath.'.php';
-
-        if (! file_exists($path)) $this->error404();
-    }
-
+    //TODO The 404 method is messy
     private function error404()
     {
         http_response_code(404);
