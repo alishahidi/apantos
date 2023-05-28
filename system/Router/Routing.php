@@ -24,19 +24,31 @@ class Routing extends stdClass
         $this->routes = $routes;
     }
 
+    private function requestMethod()
+    {
+        return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
     public function methodField()
     {
-        $method_field = strtolower($_SERVER['REQUEST_METHOD']);
+        if ($postMethod = $this->postMethod())
+                return $postMethod;
 
-        if ($method_field == 'post' && isset($_POST['_method'])) {
-            $methods = ['put', 'delete'];
+        return $this->requestMethod();
+    }
 
-            $method_field = (in_array($_POST['_method'], $methods))
-            ? $_POST['_method']
-            : $method_field;
-        }
+    private function existPostMethod()
+    {
+        return ($this->requestMethod() == 'post' && isset($_POST['_method']));
+    }
 
-        return $method_field;
+    private function postMethod()
+    {
+        if(! $this->existPostMethod()) return;
+
+        $methods = ['put', 'delete'];
+
+        return (in_array($_POST['_method'], $methods)) ?: $_POST['_method'];
     }
 
     private function matchMethod()
