@@ -7,69 +7,60 @@ class Compare
 
     private $currentRoute;
 
-    private $result = false;
-
     public function __construct($reserved, $currentRoute)
     {
         $this->reserved = $reserved;
         $this->currentRoute = $currentRoute;
     }
 
-    public function get()
+    public function handle()
     {
-        $this->handle();
-
-        return $this->result;
+        if(($this->rootPath() || $this->subPath())) return true;
     }
 
-    private function handle()
+    private function trimEqual($first, $second)
     {
-        $this->rootPath();
-
-        $this->subPath();
+        return ((trim($first, '/') === '') && (trim($second, '/') === ''));
     }
 
-    private function trimRootPath($value)
+    private function countEqual($first, $second)
     {
-        return (trim($value, '/') === '');
+        return count($first) === count($second);
     }
 
     private function rootPath()
     {
-        if($this->trimRootPath($this->currentRoute[0]) &&
-            $this->trimRootPath($this->reserved))
-            $this->result = true;
+        if($this->trimEqual($this->currentRoute[0], $this->reserved))
+            return true;
     }
 
-    private function explodeSlash()
+    private function checkArguaments($reserve, $item)
     {
-        return explode('/', $this->reserved);
+        return (! $this->existArguments($reserve)) && ($item != $reserve);
     }
 
     private function subPath()
     {
-        $reservedRouteUrlArray = $this->explodeSlash();
+        $reservedRouteUrlArray = explode('/', $this->reserved);
 
-        if (count($this->currentRoute) === count($reservedRouteUrlArray))
-            $this->checkSubPath($reservedRouteUrlArray);
+        if ($this->countEqual($this->currentRoute, $reservedRouteUrlArray))
+            return $this->resolveArguments($reservedRouteUrlArray);
     }
 
-    private function checkSubPath($reservedRouteUrlArray)
+    public function resolveArguments($reservedRouteUrlArray)
     {
         foreach($this->currentRoute as $key => $item)
         {
-            $reserve = $reservedRouteUrlArray[$key];
-            if($this->existArguments($reserve)) continue;
-            if($item != $reserve) return;
+            if(! $this->checkArguaments($reservedRouteUrlArray[$key], $item)) continue;
+
+            return;
         };
 
-        $this->result = true;
+        return true;
     }
 
     private function existArguments($reserve)
     {
-        if(substr($reserve, 0, 1) === '{' &&
-            substr($reserve, -1) === '}')
-            return true;
+        return (substr($reserve, 0, 1) === '{' && substr($reserve, -1) === '}');
     }
 }
