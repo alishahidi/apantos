@@ -17,7 +17,7 @@ class Controller
 
     public function handle()
     {
-        if(! $this->run() === false) $this->error404();;
+        if($this->run() === false) $this->error404();;
     }
 
     //TODO The checkEmpty method is messy
@@ -72,12 +72,14 @@ class Controller
         || ! $this->existMethod($object = $this->setObject())
         || ! $this->checkCountParameters($this->resolveReflaction($object)))
             return false;
+
+        return true;
     }
 
     //TODO: dirty code
     public function run()
     {
-        if($this->contains()) return false;
+        if(!($this->contains())) return false;
 
         call_user_func_array([$this->setObject(), $this->match['method']], $this->match['parameters']);
     }
