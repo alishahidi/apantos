@@ -45,7 +45,7 @@ class Find
     private function checkCompare($reserveUrl)
     {
         return (new Compare($reserveUrl, $this->currentRoute))
-            ->get();
+            ->handle();
     }
 
     private function resolveParameters($reserve)
