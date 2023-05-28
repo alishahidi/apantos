@@ -17,7 +17,7 @@ class Controller
 
     public function handle()
     {
-        if($this->run() === false) $this->error404();;
+        if($this->run() === false) (new ErrorHandler(404))->handle();
     }
 
     //TODO The checkEmpty method is messy
@@ -82,18 +82,5 @@ class Controller
         if(!($this->contains())) return false;
 
         call_user_func_array([$this->setObject(), $this->match['method']], $this->match['parameters']);
-    }
-
-    //TODO The 404 method is messy
-    private function error404()
-    {
-        http_response_code(404);
-        header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-        $view404 = Config::get('app.ERRORS.404');
-
-        if (! $view404) view('errors.404');
-        view($view404);
-
-        exit;
     }
 }
