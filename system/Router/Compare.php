@@ -18,25 +18,15 @@ class Compare
         if(($this->rootPath() || $this->subPath())) return true;
     }
 
-    private function trimEqual($first, $second)
-    {
-        return ((trim($first, '/') === '') && (trim($second, '/') === ''));
-    }
-
-    private function countEqual($first, $second)
-    {
-        return count($first) === count($second);
-    }
-
     private function rootPath()
     {
         if($this->trimEqual($this->currentRoute[0], $this->reserved))
             return true;
     }
 
-    private function checkArguaments($reserve, $item)
+    private function trimEqual($first, $second)
     {
-        return (! $this->existArguments($reserve)) && ($item != $reserve);
+        return ((trim($first, '/') === '') && (trim($second, '/') === ''));
     }
 
     private function subPath()
@@ -45,6 +35,11 @@ class Compare
 
         if ($this->countEqual($this->currentRoute, $reservedRouteUrlArray))
             return $this->resolveArguments($reservedRouteUrlArray);
+    }
+
+    private function countEqual($first, $second)
+    {
+        return count($first) === count($second);
     }
 
     public function resolveArguments($reservedRouteUrlArray)
@@ -57,6 +52,11 @@ class Compare
         };
 
         return true;
+    }
+
+    private function checkArguaments($reserve, $item)
+    {
+        return (! $this->existArguments($reserve)) && ($item != $reserve);
     }
 
     private function existArguments($reserve)
