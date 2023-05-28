@@ -48,7 +48,7 @@ class Routing extends stdClass
 
         $methods = ['put', 'delete'];
 
-        return (in_array($_POST['_method'], $methods)) ?: $_POST['_method'];
+        if(in_array($_POST['_method'], $methods)) return $_POST['_method'];
     }
 
     private function matchMethod()
