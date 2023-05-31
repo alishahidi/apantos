@@ -17,7 +17,8 @@ class Controller
 
     public function handle()
     {
-        if($this->run() === false) (new ErrorHandler(404))->handle();
+        if($this->run() === false)
+            ChainCall::instanse(ErrorHandler::class)->handle(404);
     }
 
     //TODO The checkEmpty method is messy

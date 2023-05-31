@@ -1,36 +1,19 @@
 <?php
 namespace System\Router;
+
+use Exception;
 use System\Config\Config;
 
 class ErrorHandler
 {
-    private $code;
-
-    private $configPathErrors = 'app.ERRORS';
-
-    public function __construct($code)
+    public function handle($code)
     {
-        $this->code = $code;
-    }
-
-    public function handle()
-    {
-        $code = $this->code;
-
-        if(! array_key_exists($code, Config::get($this->configPathErrors))) return;
+        if(! ($view = Config::get('app.ERRORS'.'.'.$code)))
+            return throw new Exception("Cannot find page {$code}");
 
         http_response_code($code);
-
         header($_SERVER['SERVER_PROTOCOL']."{$code}");
 
-        $this->view();
-    }
-
-    //TODO check exists file path
-    private function view()
-    {
-        view(Config::get($this->configPathErrors.'.'.$this->code));
-
-        exit;
+        return view($view);
     }
 }
