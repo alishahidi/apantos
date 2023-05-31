@@ -63,7 +63,7 @@ class Routing extends stdClass
     {
         $this->match = $this->matchMethod();
 
-        ChainCall::instanse(Controller::class, [$this->match])
+        ChainCall::instanse(Controller::class, $this->match)
             ->handle();
     }
 }

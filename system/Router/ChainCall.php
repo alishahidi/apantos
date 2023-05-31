@@ -3,6 +3,7 @@
 namespace System\Router;
 
 use Exception;
+use ReflectionClass;
 
 class ChainCall
 {
@@ -39,6 +40,9 @@ class ChainCall
     {
         $result = $this->call($method, $args);
 
+        if($result === null)
+            return (new self);
+
         if(is_object($result))
             return (new $result);
 
@@ -49,9 +53,14 @@ class ChainCall
     {
         $params = self::$params;
 
-        if(empty($params) || is_null($params))
+        if($params === null)
             return ((new self::$class)->$method(...$args));
 
-        return ((new self::$class(...$params))->$method(...$args));
+        $parameters = (new ReflectionClass(self::$class))->getConstructor()->getParameters();
+
+        if(count($params) == count($parameters))
+            return ((new self::$class(...$params))->$method(...$args));
+
+        return ((new self::$class($params))->$method(...$args));
     }
 }
