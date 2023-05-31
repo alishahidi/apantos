@@ -17,7 +17,7 @@ class Controller
 
     public function handle()
     {
-        if($this->run() === false) (new ErrorHandler(404))->handle();
+        if($this->run() === false) ErrorHandler::handle(404);
     }
 
     //TODO The checkEmpty method is messy

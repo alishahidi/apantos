@@ -1,20 +1,14 @@
 <?php
 namespace System\Router;
+
 use Exception;
 use System\Config\Config;
 
-class ErrorHandler
+class ErrorHandler extends ChainCall
 {
-    private $code;
-
-    public function __construct($code)
+    protected function handle($code)
     {
-        $this->code = $code;
-    }
-
-    public function handle()
-    {
-        if(! ($view = Config::get('app.ERRORS'.'.'.$code = $this->code)))
+        if(! ($view = Config::get('app.ERRORS'.'.'.$code)))
             return throw new Exception("Cannot find page {$code}");
 
         http_response_code($code);
