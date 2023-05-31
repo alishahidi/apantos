@@ -4,9 +4,9 @@ namespace System\Router;
 use Exception;
 use System\Config\Config;
 
-class ErrorHandler extends ChainCall
+class ErrorHandler
 {
-    protected function handle($code)
+    public function handle($code)
     {
         if(! ($view = Config::get('app.ERRORS'.'.'.$code)))
             return throw new Exception("Cannot find page {$code}");

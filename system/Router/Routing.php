@@ -55,13 +55,15 @@ class Routing extends stdClass
     {
         $reservedRoutes = $this->routes[$this->method_field];
 
-        return (new Find($reservedRoutes, $this->current_route))->handle();
+        return ChainCall::instanse(Find::class, [$reservedRoutes, $this->current_route])
+        ->handle();
     }
 
     public function run()
     {
         $this->match = $this->matchMethod();
 
-        (new Controller($this->match))->handle();
+        ChainCall::instanse(Controller::class, [$this->match])
+            ->handle();
     }
 }
